@@ -9,7 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CashController;
 
 Route::group(['domain' => ''], function() {
-    Route::get('auth',[AuthController::class, 'index'])->name('auth');
+    Route::get('/',[AuthController::class, 'index'])->name('auth');
     Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
     Route::prefix('office')->name('office.')->group(function(){
         Route::redirect('dashboard','auth', 301);

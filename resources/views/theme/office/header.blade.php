@@ -61,14 +61,7 @@
 
                     <!--end::Search-->
                     <!--begin::Activities-->
-                    <div class="d-flex align-items-center ms-1 ms-lg-3">
-                        <!--begin::Drawer toggle-->
-                        <div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
-                            id="kt_activities_toggle">
-                            <i class="bi bi-bell fs-2"></i>
-                        </div>
-                        <!--end::Drawer toggle-->
-                    </div>
+
                     <!--end::Activities-->
                     <!--begin::Quick links-->
 
