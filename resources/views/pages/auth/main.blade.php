@@ -31,6 +31,7 @@
                             <!-- autocomplete="on"-->
                             <input class="form-control form-control-lg form-control-solid" type="text" id="email"
                                 name="email" data-login="1" />
+                            <input id="url" value="{{ route('dashboard') }}" hidden>
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
@@ -49,19 +50,7 @@
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div class="fv-row mb-10">
-                            <!--begin::Label-->
-                            <label class="form-label fs-6 fw-bolder text-dark">Role</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <select name="role" id="role" class="form-select">
-                                <option value="admin">Admin</option>
-                                <option value="supervisor">Supervisor</option>
-                            </select>
-                            <!--end::Input-->
-                        </div>
-                        <!--end::Input group-->
+
                         <!--begin::Actions-->
                         <div class="text-center">
                             <!--begin::Submit button-->

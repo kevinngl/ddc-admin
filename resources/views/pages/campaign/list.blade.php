@@ -24,27 +24,27 @@
         <!--begin::Table body-->
         <tbody class="text-gray-600 fw-bold">
             <!--begin::Table row-->
-            @foreach ($donation as $item)
+            @foreach ($data as $item)
                 <tr>
                     <!--begin::Role=-->
-                    <td><img src="{{ asset($item->td_image) }}" alt="test" height="30px"></td>
-                    <td>{{ $item->td_title }}</td>
+                    <td><img src="{{ asset($item['campaign_image']) }}" alt="test" height="30px"></td>
+                    <td>{{ $item['title'] }}</td>
                     {{-- Ubah jadi Total hari --}}
-                    <td>{{ $item->td_duration_started }} to {{ $item->td_duration_end }}</td>
-                    <td>Rp. {{ number_format($item->td_target) }}</td>
-                    <td>{{ $item->user->name }}</td>
-                    <td>{{ $item->created_at }}</td>
+                    <td>{{ $item['start'] }} to {{ $item['end'] }}</td>
+                    <td>Rp. {{ number_format($item['target']) }}</td>
+                    <td>{{ $item['pic_name'] }}</td>
+                    <td>{{ $item['created_at'] }}</td>
                     <!--begin::Action=-->
                     <td>
                         <div class="btn-group" role="group">
-                            @if ($item->td_status == 'accepted')
+                            @if ($item['status'] == 'accepted')
                                 <button id="aksi" type="button" class="btn btn-sm btn-success"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     Diterima
                                 </button>
-                            @elseif ($item->td_status == 'denied')
+                            @elseif ($item['status'] == 'denied')
                                 <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.donation.edit', $item->id) }}','#ModalCreateDonation','#contentDonationModal');"
+                                    onclick="handle_open_modal('{{ route('office.campaign.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
                                     class="btn btn-sm btn-danger btn-active-light-primary3">Perbaiki</a>
                             @else
                                 <a href="javascript:;"
@@ -56,7 +56,7 @@
                         <div class="btn-group" role="group">
                             <button id="aksi" type="button" class="btn btn-sm btn-light btn-active-light-primary">
                                 <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.donation.edit', $item->id) }}','#ModalCreateDonation','#contentDonationModal');"
+                                    onclick="handle_open_modal('{{ route('office.campaign.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
                                     class="menu-link px-3">Lihat</a>
                             </button>
                         </div>
@@ -69,4 +69,4 @@
         <!--end::Table body-->
     </table>
     <!--end::Table-->
-    {{ $donation->links() }}
+    {{ $data->links() }}

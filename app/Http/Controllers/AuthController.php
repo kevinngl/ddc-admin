@@ -9,43 +9,46 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-// use App\Mail\Office\WelcomeMail;
+use App\Services\AuthService;
+
 use Exception;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guest')->except('do_logout');
+    public function __construct(){
+        $this->authService = new AuthService();
     }
     public function index()
     {
-        return view('auth.main');
+        return view('pages.auth.main');
     }
-    // Fungsi Login
     public function do_login(Request $request)
     {
-        // 
-        $datas=$request->only('email','password','role');
-        // 
-        if(Auth::attempt($datas)){
+        $email = $request['email'];
+        $password = $request['password'];
+        
+        $login = $this->authService->login($email, $password);
+        if ($login) {
             return response()->json([
                 'alert' => 'success',
-                'message' => 'Selamat datang '. Auth::user()->name,
+                'message' => 'Selamat datang ' . $login->user->name,
+                'callback' => route('dashboard'),
             ]);
-        }else{
+        } else {
             return response()->json([
                 'alert' => 'error',
                 'message' => 'Maaf, email atau password anda salah, silahkan coba lagi.',
             ]);
         }
     }
-    
+
     public function do_logout()
     {
-        $user = Auth::user();
-        Auth::logout($user);
-        return redirect()->route('office.auth');
+        if (session()->has('auth_token')) {
+            session()->remove('auth_token');
+        }
+
+        return redirect()->route('auth');
     }
 }
 

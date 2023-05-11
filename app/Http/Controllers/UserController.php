@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserApiController;
+use Hash;
 
 class UserController extends Controller
 {
@@ -25,15 +26,15 @@ class UserController extends Controller
             $user = User::
             where('name','like','%'.$request->keywords.'%')->
             paginate(10);
-            return view('users.list', compact('user'));
+            return view('pages.users.list', compact('user'));
         }
-        return view('users.main');
+        return view('pages.users.main');
     }
 
     public function profile()
     {
         $user = Auth::user();
-        return view('users.profile', compact('user'));
+        return view('pages.users.profile', compact('user'));
     }
 
     /**
@@ -43,7 +44,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.modal', ['user' => new User]);
+        return view('pages.users.modal', ['user' => new User]);
     }
 
     /**
@@ -117,7 +118,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.modal', ['user' => $user]);
+        return view('pages.users.modal', ['user' => $user]);
     }
 
     /**
@@ -130,7 +131,13 @@ class UserController extends Controller
     public function updateAdmin(Request $request, User $user)
     {
         try {
-            $user->role = 'admin';
+            // $user->role = 'admin';
+            if($request->file('photo')){
+                $tujuan_upload = 'uploaded/profile-pictures/';
+                $file = $request->file('photo');
+                $file->move($tujuan_upload,$file->getClientOriginalName());    
+                $user->photo = $file->getClientOriginalName();
+            }
             $user->update();
             return response()->json([
                 'alert' => 'success',
@@ -201,39 +208,37 @@ class UserController extends Controller
     }
 
     public function editPassword(Request $request){
-        try {
-            $this->validate($request, [
-                'password' => 'required',
-                'new_password' => 'required|min:8|confirmed', // name of fields must be new_password and new_password_confirmation
-            ]);
-        }catch (Exception $e) {
-            return response()->json([
-                'alert' => 'error',
-                'message' => 'Gagal untuk mengubah password, silahkan coba lagi.',
-            ]);
-        }
-        try{
-            $user = User::find(Auth::user()->id);
-            if(Hash::check($request->password, $user->password)) {
-                $user->password = bcrypt($request->new_password);
-                $user->update();
-                return response()->json([
-                    'alert' => 'success',
-                    'message' => 'Password berhasil diubah',
-                ]);
+        // try {
+        //     $this->validate($request, [
+        //         'password' => 'required',
+        //         'new_password' => 'required|min:8|confirmed', // name of fields must be new_password and new_password_confirmation
+        //     ]);
+        //     return response()->json([
+        //         'alert' => 'error',
+        //         'message' => 'Gagal untuk mengubah password, silahkan coba lagi.',
+        //     ]);
+        // }
+        if($request->password_baru === $request->password_confirmation){
+            try{
+                $user = User::find(Auth::user()->id);
+                if(Hash::check($request->password_lama, $user->password)) {
+                    $user->password = bcrypt($request->password_baru);
+                    $user->update();
+                    return redirect()->back()->with('success', 'your message,here');   
+                }
+                else {
+                    return redirect()->back()->with('error', 'Password lama tidak sesuai');   
+                }
             }
-            else {
+            catch (Exception $e) {
                 return response()->json([
                     'alert' => 'error',
-                    'message' => 'Password lama tidak sesuai',
+                    'message' => 'Maaf, sepertinya ada kesalahan, silahkan coba lagi.',
                 ]);
             }
+        }else{
+            return redirect()->back()->with('error_confirmation', 'Maaf, Field password baru dan konfirmasi tidak sama'); 
         }
-        catch (Exception $e) {
-            return response()->json([
-                'alert' => 'error',
-                'message' => 'Maaf, sepertinya ada kesalahan, silahkan coba lagi.',
-            ]);
-        }
+        
     }
 }

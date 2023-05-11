@@ -22,13 +22,13 @@
         <!--begin::Table body-->
         <tbody class="text-gray-600 fw-bold">
             <!--begin::Table row-->
-            @foreach ($category as $item)
+            @foreach ($data as $item)
                 <tr>
                     <!--begin::Role=-->
-                    <td>{{ $item->tc_title }}</td>
-                    <td> {{ $item->userItem->name }} </td>
-                    <td>{{ $item->created_at }}</td>
-                    <td>{{ $item->updated_at }}</td>
+                    <td>{{ $item['category'] }}</td>
+                    <td> {{ $item['pic_name'] }} </td>
+                    <td>{{ $item['created_at'] }}</td>
+                    <td>{{ $item['updated_at'] }}</td>
                     <!--begin::Action=-->
                     <td>
                         <div class="btn-group" role="group">
@@ -48,12 +48,12 @@
                                 aria-labelledby="aksi">
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_open_modal('{{ route('office.category.edit', $item->id) }}','#ModalCreateCategory','#contentCategoryModal');"
+                                        onclick="handle_open_modal('{{ route('office.category.edit', $item['id']) }}','#ModalCreateCategory','#contentCategoryModal');"
                                         class="menu-link px-3">Ubah</a>
                                 </div>
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','DELETE','{{ route('office.category.destroy', $item->id) }}');"
+                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','DELETE','{{ route('office.category.destroy', $item['updated_at']) }}');"
                                         class="menu-link px-3">Hapus</a>
                                 </div>
                             </div>
@@ -67,4 +67,4 @@
         <!--end::Table body-->
     </table>
     <!--end::Table-->
-    {{ $category->links() }}
+    {{ $data->links() }}

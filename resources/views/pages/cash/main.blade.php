@@ -27,7 +27,7 @@
                                 <!--begin::Toolbar-->
                                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                     <!--begin::Add user-->
-                                    @if (Auth::user()->role == 'admin')
+                                    @if (session('user')->user->role->name === 'admin')
                                         <button type="button" class="btn btn-primary"
                                             onclick="handle_open_modal('{{ route('office.cash.create') }}','#ModalCreateCash','#contentCashModal');">
                                             <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->

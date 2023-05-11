@@ -1,7 +1,6 @@
 const container = document.querySelector(".container");
 
-function auth(button,form,uri,title)
-{
+function auth(button, form, uri, title) {
     $(button).submit(function () {
         return false;
     });
@@ -12,21 +11,22 @@ function auth(button,form,uri,title)
         type: "POST",
         url: uri,
         data: data,
-        dataType: 'json',
+        dataType: "json",
         success: function (response) {
-            if (response.alert=="success") {
+            if (response.alert == "success") {
                 success_message(response.message);
                 $(form)[0].reset();
                 setTimeout(function () {
                     $(button).prop("disabled", false);
                     $(button).html(title);
-                    if(response.callback){
+                    if (response.callback) {
                         location.href = response.callback;
-                    }else{
+                    } else {
                         container.classList.remove("sign-up-mode");
                         $("#username_login").focus();
                     }
                 }, 2000);
+                window.location.href = $("#url").val();
             } else {
                 error_message(response.message);
                 setTimeout(function () {

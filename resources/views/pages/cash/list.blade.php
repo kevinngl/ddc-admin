@@ -23,24 +23,25 @@
         <!--begin::Table body-->
         <tbody class="text-gray-600 fw-bold">
             <!--begin::Table row-->
-            @foreach ($cash as $item)
+            @foreach ($data as $item)
                 <tr>
                     <!--begin::Role=-->
-                    <td>{{ $item->tcs_source }}</td>
-                    <td>{{ $item->donation->td_title }}</td>
-                    <td>Rp. {{ number_format($item->tcs_total) }}</td>
-                    <td>{{ $item->user->name }}</td>
-                    <td>{{ $item->created_at }}</td>
+                    <td>{{ $item['source'] }}</td>
+
+                    <td>{{ $item['title'] }}</td>
+                    <td>Rp. {{ number_format($item['total']) }}</td>
+                    <td>{{ $item['pic_name'] }}</td>
+                    <td>{{ $item['created_at'] }}</td>
                     <!--begin::Action=-->
                     <td>
                         <div class="btn-group" role="group">
-                            @if ($item->tcs_status == 'accepted')
+                            @if ($item['status'] == 'accepted')
                                 <button id="aksi" type="button" class="btn btn-sm btn-success ">
                                     Diterima
                                 </button>
-                            @elseif ($item->tcs_status == 'denied')
+                            @elseif ($item['source'] == 'denied')
                                 <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.cash.edit', $item->id) }}','#ModalCreateCash','#contentCashModal');"
+                                    onclick="handle_open_modal('{{ route('office.cash.edit', $item['id']) }}','#ModalCreateCash','#contentCashModal');"
                                     class="btn btn-sm btn-danger ">Perbaiki</a>
                             @else
                                 <button id="aksi" type="button" class="btn btn-sm btn-warning">
@@ -53,7 +54,7 @@
                         <div class="btn-group" role="group">
                             <button id="aksi" type="button" class="btn btn-sm btn-light btn-active-light-primary">
                                 <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.cash.edit', $item->id) }}','#ModalCreateCash','#contentCashModal');"
+                                    onclick="handle_open_modal('{{ route('office.cash.edit', $item['id']) }}','#ModalCreateCash','#contentCashModal');"
                                     class="menu-link px-3">Lihat</a>
                             </button>
                         </div>
@@ -66,4 +67,4 @@
         <!--end::Table body-->
     </table>
     <!--end::Table-->
-    {{ $cash->links() }}
+    {{ $data->links() }}

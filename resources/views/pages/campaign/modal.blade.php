@@ -44,10 +44,10 @@
             <!--begin::Input-->
             <select class="form-control selectpicker " name="id_category" required>
                 <option selected disabled>Pilih Kategori</option>
-                @foreach ($category as $item)
-                    <option value="{{ $item->id }}" {{ $item->id == $donation->id_category ? 'selected' : '' }}>
+                {{-- @foreach ($category as $item)
+                    <option value="{{ $item->id }}" {{ $item->id == $data->id_category ? 'selected' : '' }}>
                         {{ $item->tc_title }}</option>
-                @endforeach
+                @endforeach --}}
             </select>
             <!--end::Input-->
         </div>
@@ -60,7 +60,7 @@
             <!--begin::Input-->
             <input type="text" id="td_receiver" name="td_receiver"
                 class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Masukan Nama Penerima"
-                value="{{ $donation->td_receiver }}" />
+                value="{{ $data['receiver'] }}" />
             <!--end::Input-->
         </div>
         <!--end::Input group-->
@@ -72,7 +72,7 @@
             <!--begin::Input-->
             <input type="text" id="td_receiver" name="td_location"
                 class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Masukan Lokasi Penerima"
-                value="{{ $donation->td_location }}" />
+                value="{{ $data['location'] }}" />
             <!--end::Input-->
         </div>
         <!--end::Input group-->
@@ -84,7 +84,7 @@
             <!--end::Label-->
             <!--begin::Input-->
             <input type="text" id="nama_users" name="td_title" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan judul program" value="{{ $donation->td_title }}" />
+                placeholder="Masukan judul program" value="{{ $data['title'] }}" />
             <!--end::Input-->
         </div>
         <!--end::Input group-->
@@ -95,7 +95,7 @@
             <!--end::Label-->
             <!--begin::Input-->
             <input type="tel" id="td_target" name="td_target" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan target nominal" value="{{ $donation->td_target }}" />
+                placeholder="Masukan target nominal" value="{{ $data['target'] }}" />
             <!--end::Input-->
         </div>
         <!--end::Input group-->
@@ -106,8 +106,7 @@
             <!--end::Label-->
             <!--begin::Input-->
             <input id="kt_daterangepicker_2" name="td_duration" class="form-control form-control-solid"
-                placeholder="Masukan batas waktu"
-                value="{{ $donation->td_duration_started }} to {{ $donation->td_duration_end }}" />
+                placeholder="Masukan batas waktu" value="{{ $data['start'] }} to {{ $data['end'] }}" />
 
             <!--end::Input-->
         </div>
@@ -118,7 +117,7 @@
             <br>
 
             <!--begin::Label-->
-            <img src="{{ asset($donation->td_image) }}" alt="test" height="230px">
+            <img src="{{ asset($data['campaign_image']) }}" alt="test" height="230px">
             <!--end::Label-->
             <!--begin::Input-->
             <input type="file" class="form-control" name="td_image" placeholder="Upload gambar"
@@ -134,7 +133,7 @@
             <!--d::Label-->
             <!--begin::Input-->
             <textarea name="td_description" id="td_description" cols="30" rows="5"
-                class="form-control form-control-solid mb-3 mb-lg-0">{{ $donation->td_description }}</textarea>
+                class="form-control form-control-solid mb-3 mb-lg-0">{{ $data['description'] }}</textarea>
             <!--end::Input-->
         </div>
         <!--end::Input group-->
@@ -145,12 +144,12 @@
                 <label for="nama_users" class="required fw-bold fs-6 mb-2">Komentar Supervisor</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                @if (empty($donation->comment))
+                {{-- @if (empty($data->comment))
                     <textarea class="form-control form-control-solid mb-3 mb-lg-0" id="" cols="10" rows="3">Belum ada komentar</textarea>
                 @else
                     <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="comment" id="" cols="10"
-                        rows="3">{{ $donation->comment }}</textarea>
-                @endif
+                        rows="3">{{ $data->comment }}</textarea>
+                @endif --}}
                 <!--end::Input-->
             </div>
         @endif
@@ -168,12 +167,12 @@
 
             <div class="text-center pt-15">
                 <button id="tombol_kirim_donation"
-                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.donation.accept', $donation->id) }}','#ModalCreateDonation','POST');"
+                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.campaign.accept', $data->id) }}','#ModalCreateDonation','POST');"
                     class="btn btn-success mx-5">
                     Setuju
                 </button>
                 <button id="tombol_kirim_donation"
-                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.donation.deny', $donation->id) }}','#ModalCreateDonation','POST');"
+                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.campaign.deny', $data->id) }}','#ModalCreateDonation','POST');"
                     class="btn btn-danger mx-5">
                     Tolak
                 </button>
@@ -181,15 +180,15 @@
         @else
             <!--begin::Actions-->
             <div class="text-center pt-15">
-                @if ($donation->id)
+                @if ($data->id)
                     <button id="tombol_kirim_donation"
-                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.donation.update', $donation->id) }}','#ModalCreatedonation','POST');"
+                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.campaign.update', $data->id) }}','#ModalCreatedonation','POST');"
                         class="btn btn-primary">
                         Submit
                     </button>
                 @else
                     <button id="tombol_kirim_donation"
-                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.donation.store') }}','#ModalCreatedonation','POST');"
+                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('office.campaign.store') }}','#ModalCreatedonation','POST');"
                         class="btn btn-primary">
                         Submit
                     </button>

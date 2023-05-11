@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 class CashController extends Controller
 {
     /**
@@ -23,13 +24,31 @@ class CashController extends Controller
     // Fungsi Melihat Donasi Tunai
     public function index(Request $request)
     {
-        if($request->ajax()) {
-            $cash = Cash::
-            where('tcs_source','like','%'.$request->keywords.'%')->
-            paginate(10);
-            return view('cash.list', compact('cash'));
+        // if($request->ajax()) {
+        //     $cash = Cash::
+        //     where('tcs_source','like','%'.$request->keywords.'%')->
+        //     paginate(10);
+        //     return view('pages.cash.list', compact('cash'));
+        // }
+        // return view('cash.main');
+        if ($request->ajax()) {
+            $json = file_get_contents(public_path('data.json'));
+            $cash = json_decode($json, true);
+            
+            $filteredData = array_filter($cash, function ($item) use ($request) {
+                return strpos(strtolower($item['title']), strtolower($request->keywords)) !== false;
+            });
+            
+            $perPage = 10;
+            $currentPage = $request->page ?? 1;
+            $offset = ($currentPage - 1) * $perPage;
+            $pagedData = array_slice($filteredData, $offset, $perPage);
+            $data = new LengthAwarePaginator($pagedData, count($filteredData), $perPage, $currentPage);
+            // dd($data);
+            return view('pages.cash.list', compact('data'));
         }
-        return view('cash.main');
+        
+        return view('pages.cash.main');
     }
 
     /**
@@ -40,7 +59,7 @@ class CashController extends Controller
     public function create(Cash $cash)
     {
         $donation= Donation::get();
-        return view('cash.modal', compact('donation','cash'));
+        return view('pages.cash.modal', compact('donation','cash'));
     }
     // Fungsi Menyetujui Donasi Tunai
     public function accept(Request $request, Cash $cash)
@@ -140,7 +159,7 @@ class CashController extends Controller
     public function edit(Cash $cash)
     {
         $donation= Donation::get();
-        return view('cash.modal', compact('donation','cash'));
+        return view('pages.cash.modal', compact('donation','cash'));
     }
 
     /**

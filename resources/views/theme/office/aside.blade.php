@@ -31,6 +31,16 @@
                     </a>
                 </div>
                 <div class="menu-item py-2">
+                    <a class="menu-link menu-center {{ request()->is('campaign') ? 'active' : '' }}"
+                        href="{{ route('office.campaign.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
+                        data-bs-placement="right">
+                        <span class="menu-icon me-0">
+                            <i class="bi bi-file-text fs-2"></i>
+                        </span>
+                        <span class="menu-title">Kampanye</span>
+                    </a>
+                </div>
+                <div class="menu-item py-2">
                     <a class="menu-link menu-center {{ request()->is('cash') ? 'active' : '' }}"
                         href="{{ route('office.cash.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
                         data-bs-placement="right">
@@ -40,17 +50,7 @@
                         <span class="menu-title">Donasi Tunai</span>
                     </a>
                 </div>
-                <div class="menu-item py-2">
-                    <a class="menu-link menu-center {{ request()->is('donation') ? 'active' : '' }}"
-                        href="{{ route('office.donation.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
-                        data-bs-placement="right">
-                        <span class="menu-icon me-0">
-                            <i class="bi bi-file-text fs-2"></i>
-                        </span>
-                        <span class="menu-title">Program Donasi</span>
-                    </a>
-                </div>
-                @if (Auth::user()->role == 'admin')
+                @if (session('user')->user->role->name === 'admin')
                     <div class="menu-item py-2">
                         <a class="menu-link menu-center {{ request()->is('category') ? 'active' : '' }}"
                             href="{{ route('office.category.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
@@ -62,7 +62,7 @@
                         </a>
                     </div>
                 @endif
-                @if (Auth::user()->role == 'supervisor')
+                @if (session('user')->user->role->name === 'supervisor')
                     <div class="menu-item py-2">
                         <a class="menu-link menu-center {{ request()->is('users') ? 'active' : '' }}"
                             href="{{ route('office.users.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"

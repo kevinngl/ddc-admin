@@ -26,3 +26,16 @@
 <script src="{{ asset('assets/js/custom/apps/user-management/users/list/export-users.js') }}"></script>
 <script src="{{ asset('assets/js/custom/apps/user-management/users/list/table.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    @if (Session::has('success'))
+        alert('Password Berhasil Diubah');
+    @endif
+    @if (Session::has('error'))
+        alert('Password lama tidak sesuai');
+    @endif
+    @if (Session::has('error_confirmation'))
+        alert('Maaf, Field password baru dan konfirmasi tidak sama');
+    @endif
+</script>
+<script>
+</script>

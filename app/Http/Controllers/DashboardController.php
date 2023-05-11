@@ -11,7 +11,9 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        return view('dashboard.main');
+        
+        // dd(session('user')->user->role->name === 'supervisor');
+        return view('pages.dashboard.main');
     }
     
 }

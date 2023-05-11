@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Donation;
 use App\Models\Category;
-use App\Services\DonationService;
+use App\Services\CampaignService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\File;
@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
-class DonationProgramController extends Controller
+class CampaignController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,7 +45,7 @@ class DonationProgramController extends Controller
         //             $filename = preg_replace('/\s+/', '', $request->td_title) . '-' . $donation->id .  '.' . $extension;
         //             $file->move(Donation::$FILE_DESTINATION, $filename);
 
-        //             $payload->gambar = $FILE_DESTINATION . '/' . $filename;
+        //             $payload->gambar = $FILE_DESTINATION . '/' . $filename; 
         //         }
 
         //         $donation = DonationService::postData($payload);
@@ -55,13 +57,31 @@ class DonationProgramController extends Controller
         //     return view('error');
         // }
 
-        if($request->ajax()) {
-            $donation = Donation::
-            where('td_title','like','%'.$request->keywords.'%')->
-            paginate(10);
-            return view('donation.list', compact('donation'));
+        // if($request->ajax()) {
+        //     $donation = Donation::
+        //     where('td_title','like','%'.$request->keywords.'%')->
+        //     paginate(10);
+        //     return view('donation.list', compact('donation'));
+        // }
+        // return view('donation.main');
+        if ($request->ajax()) {
+            $json = file_get_contents(public_path('data.json'));
+            $campaign = json_decode($json, true);
+            
+            $filteredData = array_filter($campaign, function ($item) use ($request) {
+                return strpos(strtolower($item['title']), strtolower($request->keywords)) !== false;
+            });
+            
+            $perPage = 10;
+            $currentPage = $request->page ?? 1;
+            $offset = ($currentPage - 1) * $perPage;
+            $pagedData = array_slice($filteredData, $offset, $perPage);
+            $data = new LengthAwarePaginator($pagedData, count($filteredData), $perPage, $currentPage);
+            // dd($data);
+            return view('pages.campaign.list', compact('data'));
         }
-        return view('donation.main');
+        
+        return view('pages.campaign.main');
     }
 
     /**
@@ -71,8 +91,10 @@ class DonationProgramController extends Controller
      */
     public function create(Donation $donation)
     {
-        $category= Category::get();
-        return view('donation.modal', compact('category','donation'));
+        $json = file_get_contents(public_path('data.json'));
+        $data = json_decode($json, true);
+        // dd($data);
+        return view('pages.campaign.modal', compact('data'));
     }
     // Fungsi Menyetujui Program Donasi
     public function accept(Request $request, Donation $donation)
@@ -223,7 +245,7 @@ class DonationProgramController extends Controller
     public function edit(Donation $donation)
     {
         $category= Category::get();
-        return view('donation.modal', compact('category','donation'));
+        return view('pages.donation.modal', compact('category','donation'));
     }
 
     /**

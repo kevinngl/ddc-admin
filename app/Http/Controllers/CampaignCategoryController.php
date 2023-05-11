@@ -9,8 +9,9 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-
-class CategoryController extends Controller
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+class CampaignCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,13 +21,31 @@ class CategoryController extends Controller
     // Fungsi Melihat Kategori Donasi
     public function index(Request $request)
     {
-        if($request->ajax()) {
-            $category = Category::
-            where('tc_title','like','%'.$request->keywords.'%')->
-            paginate(10);
-            return view('category.list', compact('category'));
+        // if($request->ajax()) {
+        //     $category = Category::
+        //     where('tc_title','like','%'.$request->keywords.'%')->
+        //     paginate(10);
+        //     return view('pages.category.list', compact('category'));
+        // }
+        // return view('pages.category.main');
+        if ($request->ajax()) {
+            $json = file_get_contents(public_path('data.json'));
+            $campaign = json_decode($json, true);
+            
+            $filteredData = array_filter($campaign, function ($item) use ($request) {
+                return strpos(strtolower($item['title']), strtolower($request->keywords)) !== false;
+            });
+            
+            $perPage = 10;
+            $currentPage = $request->page ?? 1;
+            $offset = ($currentPage - 1) * $perPage;
+            $pagedData = array_slice($filteredData, $offset, $perPage);
+            $data = new LengthAwarePaginator($pagedData, count($filteredData), $perPage, $currentPage);
+            // dd($data);
+            return view('pages.category.list', compact('data'));
         }
-        return view('category.main');
+        
+        return view('pages.category.main');
     }
 
     /**
@@ -36,7 +55,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('category.modal', ['category' => new Category]);
+        return view('pages.category.modal', ['category' => new Category]);
     }
 
     /**
@@ -94,7 +113,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('category.modal', ['category' => $category]);
+        return view('pages.category.modal', ['category' => $category]);
     }
 
     /**

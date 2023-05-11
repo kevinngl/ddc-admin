@@ -12,7 +12,7 @@
                     <!--end::Card title-->
                     <!--begin::Action-->
                     <a href="javascript:;"
-                        onclick="handle_open_modal('{{ route('office.users.edit', Auth::user()->id) }}','#ModalCreateUsers','#contentUsersModal');"
+                        onclick="handle_open_modal('{{ route('office.users.edit', session('user')->user->id) }}','#ModalCreateUsers','#contentUsersModal');"
                         class="btn btn-primary align-self-center">Edit Profile</a>
                     <!--end::Action-->
                 </div>
@@ -26,7 +26,7 @@
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8">
-                            <span class="fw-bolder fs-6 text-gray-800">{{ $user->name }}</span>
+                            <span class="fw-bolder fs-6 text-gray-800">{{ session('user')->user->name }}</span>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -38,7 +38,7 @@
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6">{{ $user->email }}</span>
+                            <span class="fw-bold text-gray-800 fs-6">{{ session('user')->user->email }}</span>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -52,7 +52,7 @@
                         <!--end::Label-->
                         <!--begin::Col-->
                         <div class="col-lg-8 d-flex align-items-center">
-                            <span class="fw-bolder fs-6 text-gray-800 me-2">{{ $user->no_hp }}</span>
+                            <span class="fw-bolder fs-6 text-gray-800 me-2">{{ session('user')->user->phone }}</span>
                             <span class="badge badge-success">Aktif</span>
                         </div>
                         <!--end::Col-->
@@ -66,7 +66,7 @@
                         <!--begin::Col-->
                         <div class="col-lg-8">
                             <a href="#"
-                                class="fw-bold fs-6 text-gray-800 text-hover-primary">{{ $user->role }}</a>
+                                class="fw-bold fs-6 text-gray-800 text-hover-primary">{{ session('user')->user->role->name }}</a>
                         </div>
                         <!--end::Col-->
                     </div>
@@ -154,4 +154,5 @@
             <!--end::details View-->
         </div>
     </div>
+    <script></script>
 </x-office-layout>

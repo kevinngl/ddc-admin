@@ -27,9 +27,9 @@
                                 <!--begin::Toolbar-->
                                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                     <!--begin::Add user-->
-                                    @if (Auth::user()->role == 'admin')
+                                    @if (session('user')->user->role->name === 'admin')
                                         <button type="button" class="btn btn-primary"
-                                            onclick="handle_open_modal('{{ route('office.donation.create') }}','#ModalCreateDonation','#contentDonationModal');">
+                                            onclick="handle_open_modal('{{ route('office.campaign.create') }}','#ModalCreateDonation','#contentDonationModal');">
                                             <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                             <span class="svg-icon svg-icon-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
