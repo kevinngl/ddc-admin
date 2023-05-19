@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
-@include('theme.office.head')
+@include('theme.head')
 <!--end::Head-->
 <!--begin::Body-->
 
@@ -13,15 +13,15 @@
         <!--begin::Page-->
         <div class="page d-flex flex-row flex-column-fluid">
             <!--begin::Aside-->
-            @include('theme.office.aside')
+            @include('theme.aside')
             <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
                 <!--begin::Header-->
-                @include('theme.office.header')
+                @include('theme.header')
                 <!--end::Header-->
                 <!--begin::Toolbar-->
-                @include('theme.office.toolbar')
+                {{-- @include('theme.toolbar') --}}
                 <!--end::Toolbar-->
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -29,7 +29,7 @@
                 </div>
                 <!--end::Content-->
                 <!--begin::Footer-->
-                @include('theme.office.footer')
+                @include('theme.footer')
                 <!--end::Footer-->
             </div>
             <!--end::Wrapper-->
@@ -42,17 +42,17 @@
     <!--end::Activities drawer-->
 
     <!--begin::Chat drawer-->
-    {{-- @include('theme.office.chat') --}}
+    {{-- @include('theme.chat') --}}
     <!--end::Chat drawer-->
     <!--end::Drawers-->
 
     <!--begin::Modals-->
     <!--begin::Modal - Create App-->
-    @include('theme.office.modal')
+    @include('theme.modal')
     <!--end::Modal - Create App-->
 
     <!--begin::Modal - Select Location-->
-    @include('theme.office.modalfade')
+    @include('theme.modalfade')
     <!--end::Modal - Select Location-->
     <!--end::Modals-->
 
@@ -78,7 +78,7 @@
     <!--end::Main-->
 
     <!--begin::Javascript-->
-    @include('theme.office.js')
+    @include('theme.js')
     @yield('custom_js')
     <!--end::Javascript-->
 </body>

@@ -14,7 +14,7 @@
 <script src="{{ asset('assets/js/custom/apps/chat/chat.js') }}"></script>
 <script src="{{ asset('assets/js/custom/modals/create-app.js') }}"></script>
 <script src="{{ asset('assets/js/custom/modals/upgrade-plan.js') }}"></script>
-<script src="{{ asset('js/method-office.js') }}"></script>
+<script src="{{ asset('js/method-js') }}"></script>
 <script src="{{ asset('js/swa2.js') }}"></script>
 <script src="{{ asset('js/toastr.js') }}"></script>
 <script src="{{ asset('js/regex.js') }}"></script>
@@ -37,5 +37,4 @@
         alert('Maaf, Field password baru dan konfirmasi tidak sama');
     @endif
 </script>
-<script>
-</script>
+<script></script>

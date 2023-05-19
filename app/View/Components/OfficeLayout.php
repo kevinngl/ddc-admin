@@ -23,6 +23,6 @@ class OfficeLayout extends Component
      */
     public function render()
     {
-        return view('theme.office.main');
+        return view('theme.main');
     }
 }

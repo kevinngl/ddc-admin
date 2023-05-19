@@ -31,9 +31,14 @@ class AuthService {
         $response = $this->httpCurl->post($params, $url);
         $response = json_decode($response, true);
         if ($response['success']) {
-            Session::put('auth_token', $response['data']);
             $user = base64_decode($response['data']);
             $decoded = JWT::decode($response['data'], new Key($this->key, 'HS256'));
+            
+            if ($decoded->user->role->name === 'user') {
+                return false;
+            }
+
+            Session::put('auth_token', $response['data']);
             Session::put('user', $decoded);
 
             return $decoded;

@@ -12,7 +12,7 @@
                     <!--end::Card title-->
                     <!--begin::Action-->
                     <a href="javascript:;"
-                        onclick="handle_open_modal('{{ route('office.users.edit', session('user')->user->id) }}','#ModalCreateUsers','#contentUsersModal');"
+                        onclick="handle_open_modal('{{ route('users.edit', session('user')->user->id) }}','#ModalCreateUsers','#contentUsersModal');"
                         class="btn btn-primary align-self-center">Edit Profile</a>
                     <!--end::Action-->
                 </div>
@@ -97,7 +97,7 @@
                 <!--begin::Card body-->
                 <div class="card-body p-9">
                     <!--begin::Row-->
-                    <form action="{{ route('office.users.editPassword') }}" method="post" id="form-password">
+                    <form action="{{ route('users.editPassword') }}" method="post" id="form-password">
                         @csrf
                         <div class="row mb-7">
                             <!--begin::Label-->

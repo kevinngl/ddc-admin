@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-
-use App\Models\Donation;
-use App\Models\Category;
 use App\Services\CampaignService;
+use App\Services\CategoryService;
+use App\Services\AuthService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\File;
@@ -15,88 +14,138 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use DateTime;
 
 class CampaignController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    // Fungsi Melihat Program Donasi
+    public function __construct(){
+        $this->campaignService = new CampaignService();
+        $this->categoryService = new CategoryService();
+        $this->authService = new AuthService();
+    }
+    
+    public function detail($id)
+    {
+        $responseCampaign = $this->campaignService->detail($id);
+        $responseCategory = $this->categoryService->list([
+            'page' => 1,
+            'limit' => 10,
+        ]);
+        $data = $responseCampaign["data"];
+        // dd($data);
+        $category = $responseCategory["data"]["result"];
+        return view('pages.campaign.detail', compact('data','category'));
+    }
     public function index(Request $request)
     {
-        // try {
-        //     $donation = null;
+        $response = $this->campaignService->list($request);
+        $result = null;
 
-        //     if (getenv('MOCK_DONASI_LIST') === true) {
-        //         $json = file_get_contents('../../../Mock/data_donation_list.json');
-        //         $donation = json_decode($json);
-        //     } else {
-        //         $payload = {
-        //             'title' => $request->judul,
-        //             'penyelenggara' => $request->penyelenggara,
-        //             'description' => $request->deskripsi,
-        //         };
-
-        //         if ($request->hasFile('td_image')) {
-        //             $file = $request->file('td_image');
-        //             $extension = $file->getClientOriginalExtension();
-        //             $filename = preg_replace('/\s+/', '', $request->td_title) . '-' . $donation->id .  '.' . $extension;
-        //             $file->move(Donation::$FILE_DESTINATION, $filename);
-
-        //             $payload->gambar = $FILE_DESTINATION . '/' . $filename; 
-        //         }
-
-        //         $donation = DonationService::postData($payload);
-        //     }
-
-        //     return view('donation.list', compact('donation'));
-        // } catch (\Exception $e) {
-        //     Log::error($e->getMessage);
-        //     return view('error');
-        // }
-
-        // if($request->ajax()) {
-        //     $donation = Donation::
-        //     where('td_title','like','%'.$request->keywords.'%')->
-        //     paginate(10);
-        //     return view('donation.list', compact('donation'));
-        // }
-        // return view('donation.main');
-        if ($request->ajax()) {
-            $json = file_get_contents(public_path('data.json'));
-            $campaign = json_decode($json, true);
-            
-            $filteredData = array_filter($campaign, function ($item) use ($request) {
-                return strpos(strtolower($item['title']), strtolower($request->keywords)) !== false;
-            });
-            
-            $perPage = 10;
-            $currentPage = $request->page ?? 1;
-            $offset = ($currentPage - 1) * $perPage;
-            $pagedData = array_slice($filteredData, $offset, $perPage);
-            $data = new LengthAwarePaginator($pagedData, count($filteredData), $perPage, $currentPage);
-            // dd($data);
-            return view('pages.campaign.list', compact('data'));
+        if ($response["success"]) {
+            $result = $response["data"]["result"];
         }
-        
-        return view('pages.campaign.main');
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function create(Donation $donation)
-    {
-        $json = file_get_contents(public_path('data.json'));
-        $data = json_decode($json, true);
-        // dd($data);
-        return view('pages.campaign.modal', compact('data'));
+        $collection = Collection::make($result);
+        $perPage = 10;
+        $page = $request->query->get('page');
+        $data = new LengthAwarePaginator(
+            $collection,
+            $response["data"]["total"],
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        return view('pages.campaign.main', compact('data'));
     }
-    // Fungsi Menyetujui Program Donasi
+    public function create()
+    {
+        $response = $this->categoryService->list([
+            'page' => 1,
+            'limit' => 10,
+        ]);
+        $category = null;
+        $category = $response["data"]["result"];
+        return view('pages.campaign.modal', compact('category'));
+    }
+    
+    public function store(Request $request)
+    {
+        
+        $pic = session('user')->user->id;
+        $category = $request['campaignCategoryId'];
+        $title = $request['title'];
+        $target = Str::of($request['donationTarget'])->replace(',','')?: 0;
+        $description = $request['description'];
+        $duration = $request['duration'];
+        $start_date = strtok($duration, "to ");
+        $end_date = strtok(substr($duration, strpos($duration, "to"), 13), " to");
+        $start = new DateTime($start_date);
+        $end = new DateTime($end_date);
+        $durationResult = $start->diff($end)->format('%a');
+        $payload = [
+            'campaignCategoryId' => $category,
+            'campaignPicId' => $pic,
+            'title' => $title,
+            'donationTarget' => $target,
+            'description' => $description,
+            'startDate' => $start_date,
+            'endDate' => $end_date,
+            'duration' => $durationResult,
+        ];
+
+        $response = $this->campaignService->create($payload);
+        if ($response['success']) {
+            return response()->json([
+                'alert' => 'success',
+                'message' => 'Program Kampanye '. $request['title'] . ' telah didaftarkan',
+            ]);
+        } else {
+            return response()->json([
+                'alert' => 'error',
+                'message' => 'Maaf, sepertinya ada yang salah, silahkan coba lagi.',
+            ]);
+        }
+
+    }
+    public function update($id, Request $request )
+    {
+        // dd($request);
+        $pic = session('user')->user->id;
+        $category = $request['campaignCategoryId'];
+        $title = $request['title'];
+        $target = Str::of($request['donationTarget'])->replace(',','')?: 0;
+        $description = $request['description'];
+        $duration = $request['duration'];
+        $start_date = strtok($duration, "to ");
+        $end_date = strtok(substr($duration, strpos($duration, "to"), 13), " to");
+        $start = new DateTime($start_date);
+        $end = new DateTime($end_date);
+        $durationResult = $start->diff($end)->format('%a');
+        $payload = [
+            'campaignCategoryId' => $category,
+            'campaignPicId' => $pic,
+            'title' => $title,
+            'donationTarget' => $target,
+            'description' => $description,
+            'startDate' => $start_date,
+            'endDate' => $end_date,
+            'duration' => $durationResult,
+        ];
+        
+        $response = $this->campaignService->update($id,$payload);
+        if ($response['success']) {
+            return response()->json([
+                'alert' => 'success',
+                'message' => 'Program Kampanye '. $request['title'] . ' telah diperbaharui',
+            ]);
+        } else {
+            return response()->json([
+                'alert' => 'error',
+                'message' => 'Maaf, sepertinya ada yang salah, silahkan coba lagi.',
+            ]);
+        }
+    }
     public function accept(Request $request, Donation $donation)
     {
         try {
@@ -114,7 +163,6 @@ class CampaignController extends Controller
             ]);
         }
     }
-    // Fungsi Menolak Program Donasi
     public function deny(Request $request, Donation $donation)
     {
         try {
@@ -132,173 +180,7 @@ class CampaignController extends Controller
             ]);
         }
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // Fungsi Membuat Program Donasi
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id_category' => 'required',
-            'td_title' => 'required|string',
-            'td_receiver' => 'required|string',
-            'td_target' => 'required',
-            'td_duration' => 'required',
-            'td_description' => 'required',
-            'td_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            if ($errors->has('id_category')) {
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('id_category'),
-                ]);
-            }else if($errors->has('td_title')){
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('td_title'),
-                ]);
-            }else if($errors->has('td_receiver')){
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('td_receiver'),
-                ]);
-            }else if($errors->has('td_target')){
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('td_target'),
-                ]);
-            }else if($errors->has('td_duration')){
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('td_duration'),
-                ]);
-            }else if($errors->has('td_description')){
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('td_description'),
-                ]);
-            }else if($errors->has('td_image')){
-                return response()->json([
-                    'alert' => 'error',
-                    'message' => $errors->first('td_image'),
-                ]);
-            }
-        }
-        try {
-            $donation = new Donation;
-            $donation->id_user = Auth::user()->id;
-            $donation->id_category = $request->id_category;
-            $donation->td_title = $request->td_title;
-            $donation->td_location = $request->td_location;
-            $donation->td_receiver = $request->td_receiver;
-            $donation->td_target = Str::of($request->td_target)->replace(',','')?: 0;
-            $td_duration_end = strtok(substr($request->td_duration, strpos($request->td_duration, "to"), 13), " to");
-            $td_duration_started = strtok($request->td_duration, "to ");
-            $donation->td_duration_started = $td_duration_started;
-            $donation->td_duration_end = $td_duration_end;
-            $donation->td_description = $request->td_description;
-            $donation->td_image = Donation::$FILE_DESTINATION . '/' . 'default.jpg';
-            if($request->hasFile('td_image')) {
-                $file = $request->file('td_image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = preg_replace('/\s+/', '', $request->td_title) . '-' . $donation->id .  '.' . $extension;
-                $file->move(Donation::$FILE_DESTINATION, $filename);
-                $donation->td_image = Donation::$FILE_DESTINATION . '/' . $filename;
-            }
-            // dd($donation);
-            $donation->save();
-            return response()->json([
-                'alert' => 'success',
-                'message' => 'Program Donasi '. $request->td_title . ' telah didaftarkan',
-            ]);
-        }catch (Exception $e) {
-            return response()->json([
-                'alert' => 'error',
-                'message' => 'Maaf, sepertinya ada yang salah, silahkan coba lagi.',
-            ]);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Donation  $donation
-     * @return \Illuminate\Http\Response
-     */
-    public function show(donation $donation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Donation  $donation
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function edit(Donation $donation)
-    {
-        $category= Category::get();
-        return view('pages.donation.modal', compact('category','donation'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Donation  $donation
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // Fungsi Mengubah Program Donasi
-    public function update(Request $request, Donation $donation)
-    {
-        try {
-            $donation->id_user = Auth::user()->id;
-            $donation->id_category = $request->id_category;
-            $donation->td_title = $request->td_title;
-            $donation->td_receiver = $request->td_receiver;
-            $donation->td_location = $request->td_location;
-            $donation->td_target = Str::of($request->td_target)->replace(',','')?: 0;
-            $td_duration_end = strtok(substr($request->td_duration, strpos($request->td_duration, "to"), 13), " to");
-            $td_duration_started = strtok($request->td_duration, "to ");
-            $donation->td_duration_started = $td_duration_started;
-            $donation->td_duration_end = $td_duration_end;
-            $donation->td_description = $request->td_description;
-            $donation->td_image = Donation::$FILE_DESTINATION . '/' . 'default.jpg';
-            $donation->td_status = 'waiting';
-            if($request->hasFile('td_image')) {
-                $file = $request->file('td_image');
-                $extension = $file->getClientOriginalExtension();
-                $filename = preg_replace('/\s+/', '', $request->td_title) . '-' . $donation->id .  '.' . $extension;
-                $file->move(Donation::$FILE_DESTINATION, $filename);
-                $donation->td_image = Donation::$FILE_DESTINATION . '/' . $filename;
-            }
-            $donation->update();
-            return response()->json([
-                'alert' => 'success',
-                'message' => 'Program donasi '. $request->td_title . ' telah di perbaiki',
-            ]);
-        }catch (Exception $e) {
-            return response()->json([
-                'alert' => 'error',
-                'message' => 'Maaf, sepertinya ada kesalahan, silahkan coba lagi.',
-            ]);
-        }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Donation  $donation
-     * @return \Illuminate\Http\JsonResponse
-     */
+    
     public function destroy(Donation $donation)
     {
         try {
@@ -315,7 +197,6 @@ class CampaignController extends Controller
             ]);
         }
     }
-
     public function extracted(Request $request, $donation): void
     {
         $file = $request->file('file');
@@ -326,38 +207,4 @@ class CampaignController extends Controller
 
         $donation->file = Donation::$FILE_DESTINATION . '/' . $fileName;
     }
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Donation  $donation
-     * @return \Illuminate\Http\JsonResponse
-     */
-    // public function destroy(Donation $donation)
-    // {
-    //     try {
-    //         Storage::delete($donation->file);
-    //         $donation->delete();
-    //         return response()->json([
-    //             'alert' => 'success',
-    //             'message' => 'File '. $donation->judul . ' Dihapus',
-    //         ]);
-    //     }catch (Exception $e) {
-    //         return response()->json([
-    //             'alert' => 'error',
-    //             'message' => 'Maaf, sepertinya ada kesalahan, silahkan coba lagi.',
-    //         ]);
-    //     }
-    // }
-
-    // public function extracted(Request $request, $donation): void
-    // {
-    //     $file = $request->file('file');
-    //     $fileExtension = $file->getClientOriginalExtension();
-    //     $judulWithoutSpace = preg_replace('/\s+/', '', $request->judul);
-    //     $fileName = $judulWithoutSpace . '-' . date("d-m-Y_H-i-s") . '.' . $fileExtension;
-    //     $file->move(Donation::$FILE_DESTINATION, $fileName);
-
-    //     $donation->file = Donation::$FILE_DESTINATION . '/' . $fileName;
-    // }
 }

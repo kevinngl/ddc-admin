@@ -4,15 +4,11 @@
         <thead>
             <!--begin::Table row-->
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                {{-- <th class="w-10px pe-2">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                        <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1" />
-                    </div>
-                </th> --}}
                 <th class="min-w-125px">Nama Kategori</th>
-                <th class="min-w-125px">Dibuat Oleh</th>
-                <th class="min-w-125px">Dibuat pada</th>
-                <th class="min-w-125px">Diubah pada</th>
+                <th class="min-w-125px">Deskripsi</th>
+                {{-- <th class="min-w-125px">Dibuat Oleh</th> --}}
+                {{-- <th class="min-w-125px">Dibuat pada</th>
+                <th class="min-w-125px">Diubah pada</th> --}}
                 <th class="min-w-125px">Actions</th>
 
             </tr>
@@ -25,10 +21,11 @@
             @foreach ($data as $item)
                 <tr>
                     <!--begin::Role=-->
-                    <td>{{ $item['category'] }}</td>
-                    <td> {{ $item['pic_name'] }} </td>
-                    <td>{{ $item['created_at'] }}</td>
-                    <td>{{ $item['updated_at'] }}</td>
+                    <td>{{ $item['name'] }}</td>
+                    <td> {{ $item['description'] }} </td>
+                    {{-- <td> {{ $item['pic_name'] }} </td> --}}
+                    {{-- <td>{{ $item['createdAt'] }}</td>
+                    <td>{{ $item['updatedAt'] }}</td> --}}
                     <!--begin::Action=-->
                     <td>
                         <div class="btn-group" role="group">
@@ -48,12 +45,12 @@
                                 aria-labelledby="aksi">
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_open_modal('{{ route('office.category.edit', $item['id']) }}','#ModalCreateCategory','#contentCategoryModal');"
+                                        onclick="handle_open_modal('{{ route('category.edit', $item['id']) }}','#ModalCreateCategory','#contentCategoryModal');"
                                         class="menu-link px-3">Ubah</a>
                                 </div>
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','DELETE','{{ route('office.category.destroy', $item['updated_at']) }}');"
+                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','DELETE','{{ route('category.destroy', $item['name']) }}');"
                                         class="menu-link px-3">Hapus</a>
                                 </div>
                             </div>
@@ -67,4 +64,32 @@
         <!--end::Table body-->
     </table>
     <!--end::Table-->
-    {{ $data->links() }}
+    <div class="row">
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
+        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+            <div class="dataTables_paginate paging_simple_numbers" id="kt_table_users_paginate">
+                <ul class="pagination">
+                    <li class="page-item {{ $data->previousPageUrl() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->previousPageUrl() }}">Previous</a>
+                    </li>
+
+                    @php
+                        $currentPage = $data->currentPage();
+                        $lastPage = $data->lastPage();
+                        $startPage = max($currentPage - 1, 1);
+                        $endPage = min($currentPage + 1, $lastPage);
+                    @endphp
+
+                    @for ($page = $startPage; $page <= $endPage; $page++)
+                        <li class="page-item {{ $data->currentPage() == $page ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $data->url($page) }}">{{ $page }}</a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $data->nextPageUrl() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->nextPageUrl() }}">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>

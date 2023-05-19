@@ -28,7 +28,7 @@
         <!--begin::Heading-->
         <div class="mb-13 text-center">
             <!--begin::Title-->
-            @if ($category->id)
+            @if ($category['id'])
                 <h1 class="mb-3">Edit Category</h1>
             @else
                 <h1 class="mb-3">Add Category</h1>
@@ -40,29 +40,34 @@
         <div class="fv-row mb-7">
             <!--begin::Label-->
             <label for="tc_title" class="required fw-bold fs-6 mb-2">Nama Kategori</label>
-            <!--end::Label-->
-            <!--begin::Input-->
-            <input type="text" id="tc_title" name="tc_title" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan data" value="{{ $category->tc_title }}" />
-            <!--end::Input-->
+            <input type="text" id="tc_title" name="name" class="form-control form-control-solid mb-3 mb-lg-0"
+                placeholder="Masukan data" value="{{ $category['name'] }}" />
         </div>
         <!--end::Input group-->
-
+        <!--begin::Input group-->
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
+            <label for="tc_title" class="required fw-bold fs-6 mb-2">Deskripsi</label>
+            <input type="text" id="tc_title" name="description" class="form-control form-control-solid mb-3 mb-lg-0"
+                placeholder="Masukan data" value="{{ $category['description'] }}" />
+        </div>
+        <!--end::Input group-->
         <!--begin::Actions-->
         <div class="text-center pt-15">
-            @if ($category->id)
+            @if (isset($category['id']))
                 <button id="tombol_kirim_category"
-                    onclick="save_form_modal('#tombol_kirim_category','#form_create_category','{{ route('office.category.update', $category->id) }}','#ModalCreateCategory','POST');"
+                    onclick="save_form_modal('#tombol_kirim_category','#form_create_category','{{ route('category.update', $category['id']) }}','#ModalCreateCategory','POST');"
                     class="btn btn-primary">
                     Submit
                 </button>
             @else
                 <button id="tombol_kirim_category"
-                    onclick="save_form_modal('#tombol_kirim_category','#form_create_category','{{ route('office.category.store') }}','#ModalCreateCategory','POST');"
+                    onclick="save_form_modal('#tombol_kirim_category','#form_create_category','{{ route('category.store') }}','#ModalCreateCategory','POST');"
                     class="btn btn-primary">
                     Submit
                 </button>
             @endif
+
         </div>
         <!--end::Actions-->
     </form>

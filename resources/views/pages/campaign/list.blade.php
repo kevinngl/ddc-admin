@@ -4,17 +4,11 @@
         <thead>
             <!--begin::Table row-->
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                {{-- <th class="w-10px pe-2">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                        <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1" />
-                    </div>
-                </th> --}}
-                <th class="min-w-125px">Gambar</th>
                 <th class="min-w-125px">Nama Program</th>
                 <th class="min-w-125px">Batas Waktu</th>
                 <th class="min-w-125px">Target Dana</th>
-                <th class="min-w-125px">Dibuat Oleh</th>
-                <th class="min-w-125px">Dibuat Tanggal</th>
+                <th class="min-w-125px">Waktu Dibuat</th>
+                <th class="min-w-125px">PIC</th>
                 <th class="min-w-125px">Status</th>
                 <th class="min-w-125px">Aksi</th>
             </tr>
@@ -26,39 +20,30 @@
             <!--begin::Table row-->
             @foreach ($data as $item)
                 <tr>
-                    <!--begin::Role=-->
-                    <td><img src="{{ asset($item['campaign_image']) }}" alt="test" height="30px"></td>
+                    </td>
                     <td>{{ $item['title'] }}</td>
-                    {{-- Ubah jadi Total hari --}}
-                    <td>{{ $item['start'] }} to {{ $item['end'] }}</td>
-                    <td>Rp. {{ number_format($item['target']) }}</td>
-                    <td>{{ $item['pic_name'] }}</td>
-                    <td>{{ $item['created_at'] }}</td>
-                    <!--begin::Action=-->
+                    <td>{{ strftime('%e %B %Y', strtotime($item['startDate'])) }} to
+                        {{ strftime('%e %B %Y', strtotime($item['endDate'])) }}</td>
+                    <td>Rp. {{ number_format($item['donationTarget']) }}</td>
+                    <td>{{ strftime('%e %B %Y, %H:%M', strtotime($item['createdAt'])) }} WIB</td>
+                    <td>{{ $item['pic']['name'] ?? 'N/A' }}</td>
                     <td>
-                        <div class="btn-group" role="group">
-                            @if ($item['status'] == 'accepted')
-                                <button id="aksi" type="button" class="btn btn-sm btn-success"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Diterima
-                                </button>
-                            @elseif ($item['status'] == 'denied')
-                                <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.campaign.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
-                                    class="btn btn-sm btn-danger btn-active-light-primary3">Perbaiki</a>
-                            @else
-                                <a href="javascript:;"
-                                    class="btn btn-sm btn-warning btn-active-light-primary3">Menunggu</a>
-                            @endif
-                        </div>
+                        @if ($item['status'] === 'approved')
+                            <div class="badge badge-light-success fw-bolder">Diterima</div>
+                        @elseif ($item['status'] === 'request-revision')
+                            <div class="badge badge-light-warning fw-bolder">Revisi</div>
+                        @elseif ($item['status'] === 'rejected')
+                            <div class="badge badge-light-danger fw-bolder">Ditolak</div>
+                        @elseif ($item['status'] === 'waiting-for-approval')
+                            <div class="badge badge-light-info fw-bolder">Menunggu</div>
+                        @endif
                     </td>
                     <td>
                         <div class="btn-group" role="group">
-                            <button id="aksi" type="button" class="btn btn-sm btn-light btn-active-light-primary">
-                                <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.campaign.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
-                                    class="menu-link px-3">Lihat</a>
-                            </button>
+
+                            <a href="{{ route('campaign.detail', $item['id']) }}"
+                                class="btn btn-sm btn-light btn-active-light-primary">Lihat</a>
+
                         </div>
                     </td>
                     <!--end::Action=-->
@@ -69,4 +54,33 @@
         <!--end::Table body-->
     </table>
     <!--end::Table-->
-    {{ $data->links() }}
+
+    <div class="row">
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
+        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+            <div class="dataTables_paginate paging_simple_numbers" id="kt_table_users_paginate">
+                <ul class="pagination">
+                    <li class="page-item {{ $data->previousPageUrl() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->previousPageUrl() }}">Previous</a>
+                    </li>
+
+                    @php
+                        $currentPage = $data->currentPage();
+                        $lastPage = $data->lastPage();
+                        $startPage = max($currentPage - 1, 1);
+                        $endPage = min($currentPage + 1, $lastPage);
+                    @endphp
+
+                    @for ($page = $startPage; $page <= $endPage; $page++)
+                        <li class="page-item {{ $data->currentPage() == $page ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $data->url($page) }}">{{ $page }}</a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $data->nextPageUrl() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->nextPageUrl() }}">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>

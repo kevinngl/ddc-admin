@@ -14,13 +14,13 @@ class HttpCurl {
         $this->token = Session::get('auth_token');
     }
 
-    public function get($params, $url) {
+    public function get($url, $params) {
         $url = $url ?? $this->url;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json', $this->token !== null ? 'Authorization: Bearer ' . $this->token : ''));
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
+    
         $result = curl_exec($ch);
         curl_close($ch);
         return $result;

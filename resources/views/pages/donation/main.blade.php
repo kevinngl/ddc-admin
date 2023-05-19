@@ -29,7 +29,7 @@
                                     <!--begin::Add user-->
                                     @if (session('user')->user->role->name === 'admin')
                                         <button type="button" class="btn btn-primary"
-                                            onclick="handle_open_modal('{{ route('office.cash.create') }}','#ModalCreateCash','#contentCashModal');">
+                                            onclick="handle_open_modal('{{ route('donation.create') }}','#ModalCreateDonation','#contentDonationModal');">
                                             <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                             <span class="svg-icon svg-icon-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg"

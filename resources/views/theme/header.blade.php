@@ -109,7 +109,7 @@
                             <!--end::Menu separator-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="{{ route('office.users.profile') }}" class="menu-link px-5">My Profile</a>
+                                <a href="{{ route('users.profile') }}" class="menu-link px-5">My Profile</a>
                             </div>
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
@@ -132,7 +132,7 @@
                             <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
-                                <a href="{{ route('office.logout') }}" class="menu-link px-5">Sign Out</a>
+                                <a href="{{ route('logout') }}" class="menu-link px-5">Sign Out</a>
                             </div>
                             <!--end::Menu item-->
                         </div>

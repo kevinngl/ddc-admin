@@ -55,7 +55,7 @@
                         <div class="text-center">
                             <!--begin::Submit button-->
                             <button id="tombol_login"
-                                onclick="auth('#tombol_login','#form_login','{{ route('office.login') }}','Login');"
+                                onclick="auth('#tombol_login','#form_login','{{ route('login') }}','Login');"
                                 type="button" class="btn btn-lg btn-primary w-100 mb-5" data-login="3">
                                 Masuk
                             </button>

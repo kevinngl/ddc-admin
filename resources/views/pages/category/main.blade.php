@@ -18,9 +18,9 @@
                                                 fill="black" />
                                         </svg>
                                     </span>
-                                    <input type="text" name="keywords" onkeyup="load_list(1);"
+                                    <input type="text" id="search-judul"
                                         class="form-control form-control-solid w-250px ps-15"
-                                        placeholder="Cari data..." />
+                                        placeholder="Cari judul..." />
                                 </div>
                             </div>
                             <div class="card-toolbar">
@@ -28,7 +28,7 @@
                                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                     <!--begin::Add user-->
                                     <button type="button" class="btn btn-primary"
-                                        onclick="handle_open_modal('{{ route('office.category.create') }}','#ModalCreateCategory','#contentCategoryModal');">
+                                        onclick="handle_open_modal('{{ route('category.create') }}','#ModalCreateCategory','#contentCategoryModal');">
                                         <!--begin::Svg Icon | path: icons/duotone/Navigation/Plus.svg-->
                                         <span class="svg-icon svg-icon-2">
                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +144,7 @@
                     </form>
                     <div class="card-body pt-0">
                         <div class="table-responsive">
-                            <div id="list_result"></div>
+                            @include('pages.category.list')
                         </div>
                     </div>
                 </div>
@@ -152,9 +152,18 @@
         </div>
     </div>
     <div id="content_input"></div>
-    @section('custom_js')
-        <script>
-            load_list(1);
-        </script>
-    @endsection
+    <script>
+        document.getElementById('search-judul').addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) { // Enter key pressed
+                event.preventDefault();
+                var searchQuery = this.value.trim();
+
+                // Generate the new URL with additional query parameter
+                var newUrl = "{{ url()->current() }}" + "?name=" + encodeURIComponent(searchQuery);
+
+                // Redirect to the new URL
+                window.location.href = newUrl;
+            }
+        });
+    </script>
 </x-office-layout>

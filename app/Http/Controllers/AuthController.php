@@ -37,7 +37,7 @@ class AuthController extends Controller
         } else {
             return response()->json([
                 'alert' => 'error',
-                'message' => 'Maaf, email atau password anda salah, silahkan coba lagi.',
+                'message' => 'Autentikasi gagal. Cek akun anda.',
             ]);
         }
     }

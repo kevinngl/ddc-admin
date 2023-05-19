@@ -67,17 +67,17 @@
                                 aria-labelledby="aksi">
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','POST','{{ route('office.users.updateAdmin', $users->id) }}');"
+                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','POST','{{ route('users.updateAdmin', $users->id) }}');"
                                         class="menu-link px-3">Admin</a>
                                 </div>
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','POST','{{ route('office.users.updateSuper', $users->id) }}');"
+                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','POST','{{ route('users.updateSuper', $users->id) }}');"
                                         class="menu-link px-3">Supervisor</a>
                                 </div>
                                 <div class="menu-item px-3">
                                     <a href="javascript:;"
-                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','POST','{{ route('office.users.updateUser', $users->id) }}');"
+                                        onclick="handle_confirm('Apakah Anda Yakin?','Yakin','Tidak','POST','{{ route('users.updateUser', $users->id) }}');"
                                         class="menu-link px-3">User</a>
                                 </div>
                             </div>

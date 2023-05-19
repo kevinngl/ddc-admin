@@ -185,13 +185,13 @@
         <div class="text-center pt-15">
             @if ($user->id)
                 <button id="tombol_kirim_users"
-                    onclick="upload_form_modal('#tombol_kirim_users','#form_create_users','{{ route('office.users.updateAdmin', $user->id) }}','#ModalCreateUsers','POST');"
+                    onclick="upload_form_modal('#tombol_kirim_users','#form_create_users','{{ route('users.updateAdmin', $user->id) }}','#ModalCreateUsers','POST');"
                     class="btn btn-primary">
                     Submit
                 </button>
             @else
                 <button id="tombol_kirim_users"
-                    onclick="upload_form_modal('#tombol_kirim_users','#form_create_users','{{ route('office.users.store') }}','#ModalCreateUsers','POST');"
+                    onclick="upload_form_modal('#tombol_kirim_users','#form_create_users','{{ route('users.store') }}','#ModalCreateUsers','POST');"
                     class="btn btn-primary">
                     Submit
                 </button>

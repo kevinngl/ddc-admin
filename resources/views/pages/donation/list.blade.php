@@ -41,7 +41,7 @@
                                 </button>
                             @elseif ($item['source'] == 'denied')
                                 <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.cash.edit', $item['id']) }}','#ModalCreateCash','#contentCashModal');"
+                                    onclick="handle_open_modal('{{ route('donation.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
                                     class="btn btn-sm btn-danger ">Perbaiki</a>
                             @else
                                 <button id="aksi" type="button" class="btn btn-sm btn-warning">
@@ -54,7 +54,7 @@
                         <div class="btn-group" role="group">
                             <button id="aksi" type="button" class="btn btn-sm btn-light btn-active-light-primary">
                                 <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('office.cash.edit', $item['id']) }}','#ModalCreateCash','#contentCashModal');"
+                                    onclick="handle_open_modal('{{ route('donation.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
                                     class="menu-link px-3">Lihat</a>
                             </button>
                         </div>

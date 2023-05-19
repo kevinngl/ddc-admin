@@ -6,14 +6,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CampaignCategoryController;
-use App\Http\Controllers\CashController;
+use App\Http\Controllers\DonationController;
 
 Route::group(['domain' => ''], function() {
     Route::get('/',[AuthController::class, 'index'])->name('auth');
-    Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
-    Route::prefix('office')->name('office.')->group(function(){
-        Route::redirect('dashboard','auth', 301);
-        Route::get('auth',[AuthController::class, 'index'])->name('auth');
+    Route::get('auth',[AuthController::class, 'index'])->name('auth');
         Route::post('login',[AuthController::class, 'do_login'])->name('login'); 
                    
         Route::middleware(['checkAuthToken'])->group(function(){
@@ -21,28 +18,30 @@ Route::group(['domain' => ''], function() {
         
             Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
     
-            Route::prefix('cash')->name('cash.')->group(function(){
-                Route::get('',  [CashController::class, 'index'])->name('index');
-                Route::get('create',[CashController::class, 'create'])->name('create');
-                Route::get('edit/{cash}',  [CashController::class, 'edit'])->name('edit');
-                Route::post('store',     [CashController::class, 'store'])->name('store');
-                Route::post('update/{cash}',   [CashController::class, 'update'])->name('update');
-                Route::delete('destroy/{cash}', [CashController::class, 'destroy'])->name('destroy');
-                Route::post('accept/{cash}',  [CashController::class, 'accept'])->name('accept');
-                Route::post('deny/{cash}',  [CashController::class, 'deny'])->name('deny');
+            Route::prefix('donation')->name('donation.')->group(function(){
+                Route::get('',  [DonationController::class, 'index'])->name('index');
+                Route::get('create',[DonationController::class, 'create'])->name('create');
+                Route::get('edit/{donation}',  [DonationController::class, 'edit'])->name('edit');
+                Route::post('store',     [DonationController::class, 'store'])->name('store');
+                Route::post('update/{donation}',   [DonationController::class, 'update'])->name('update');
+                Route::delete('destroy/{donation}', [DonationController::class, 'destroy'])->name('destroy');
+                Route::post('accept/{donation}',  [DonationController::class, 'accept'])->name('accept');
+                Route::post('deny/{donation}',  [DonationController::class, 'deny'])->name('deny');
             });
             Route::prefix('campaign')->name('campaign.')->group(function(){
-                Route::get('',  [CampaignController::class, 'index'])->name('index');
+                Route::get('detail/{id}',  [CampaignController::class, 'detail'])->name('detail');
+                Route::get('list',  [CampaignController::class, 'index'])->name('index');
                 Route::get('create',[CampaignController::class, 'create'])->name('create');
-                Route::get('edit/{campaign}',  [CampaignController::class, 'edit'])->name('edit');
+                Route::get('edit/{id}',  [CampaignController::class, 'edit'])->name('edit');
                 Route::post('store',     [CampaignController::class, 'store'])->name('store');
-                Route::post('update/{campaign}',   [CampaignController::class, 'update'])->name('update');
+                Route::put('update/{id}',   [CampaignController::class, 'update'])->name('update');
                 Route::delete('destroy/{campaign}', [CampaignController::class, 'destroy'])->name('destroy');
                 Route::post('accept/{campaign}',  [CampaignController::class, 'accept'])->name('accept');
-                Route::post('deny/{campaign}',  [CampaignController::class, 'deny'])->name('deny');
+                Route::post('reject/{campaign}',  [CampaignController::class, 'reject'])->name('reject');
+                Route::post('revise/{campaign}',  [CampaignController::class, 'revise'])->name('revise');
             });
             Route::prefix('category')->name('category.')->group(function(){
-                Route::get('',  [CampaignCategoryController::class, 'index'])->name('index');
+                Route::get('list',  [CampaignCategoryController::class, 'index'])->name('list');
                 Route::get('create',[CampaignCategoryController::class, 'create'])->name('create');
                 Route::get('edit/{category}',  [CampaignCategoryController::class, 'edit'])->name('edit');
                 Route::post('store',[CampaignCategoryController::class, 'store'])->name('store');
@@ -62,5 +61,4 @@ Route::group(['domain' => ''], function() {
                 Route::post('editPassword', [UserController::class, 'editPassword'])->name('editPassword');
             });        
         });
-    });
 });
