@@ -1,17 +1,21 @@
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 function load_content_input(url) {
     // show_progress('input');
-    $.post(url, {}, function(result) {
+    $.post(url, {}, function (result) {
         $('#content_input').html(result);
         main_content('content_input');
         // hide_progress();
     }, "html");
 }
-function open_modal(id)
-{
+function open_modal(id) {
     $(id).modal('show');
 }
-function save_form(tombol,form,url)
-{
+function save_form(tombol, form, url) {
     $(tombol).submit(function () {
         return false;
     });
@@ -24,7 +28,7 @@ function save_form(tombol,form,url)
         data: data,
         dataType: 'json',
         success: function (response) {
-            if (response.alert=="success") {
+            if (response.alert == "success") {
                 success_message(response.message);
                 $(form)[0].reset();
                 setTimeout(function () {
@@ -41,10 +45,9 @@ function save_form(tombol,form,url)
             }
         },
     });
-    
+
 }
-function save_form_modal(tombol,form,url,modal, method)
-{
+function save_form_modal(tombol, form, url, modal, method) {
     $(tombol).submit(function () {
         return false;
     });
@@ -57,7 +60,7 @@ function save_form_modal(tombol,form,url,modal, method)
         data: data,
         dataType: 'json',
         success: function (response) {
-            if (response.alert=="success") {
+            if (response.alert == "success") {
                 success_message(response.message);
                 $(form)[0].reset();
                 $(modal).modal('toggle');
@@ -75,49 +78,43 @@ function save_form_modal(tombol,form,url,modal, method)
             }
         },
     });
-    
-}
-function upload_form_modal(tombol,form,url,modal,method)
-{
-    $(document).one('submit', form, function (e) {
-        let data = new FormData(this);
-        data.append('_method', 'POST');
-        $(tombol).prop("disabled", true);
-        $(tombol).html("Harap tunggu");
-        $.ajax({
-            type: method,
-            url: url,
-            data: data,
-            enctype: 'multipart/form-data',
-            cache: false,
-            contentType: false,
-            resetForm: true,
-            processData: false,
-            dataType: 'json',
-            success: function (response) {
-                if (response.alert=="success") {
-                    success_message(response.message);
-                    $(form)[0].reset();
-                    $(modal).modal('hide');
-                    setTimeout(function () {
-                        $(tombol).prop("disabled", false);
-                        $(tombol).html("Submit");
-                        load_list(1);
-                    }, 2000);
-                } else {
-                    error_message(response.message);
-                    setTimeout(function () {
-                        $(tombol).prop("disabled", false);
-                        $(tombol).html("Submit");
-                    }, 2000);
-                }
-            },
-        });
-        return false;
-    });
 
 }
-function handle_open_modal(url,modal,content){
+function upload_form_modal(tombol, form, url, modal, method) {
+    $(tombol).submit(function () {
+        return false;
+    });
+    let data = $(form).serialize();
+    $(tombol).prop("disabled", true);
+    $(tombol).html("Harap tunggu");
+    $.ajax({
+        type: method,
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function (response) {
+            if (response.alert == "success") {
+                success_message(response.message);
+                $(form)[0].reset();
+                $(modal).modal('hide');
+                setTimeout(function () {
+                    $(tombol).prop("disabled", false);
+                    $(tombol).html("Submit");
+                    load_list(1);
+                }, 2000);
+            } else {
+                error_message(response.message);
+                setTimeout(function () {
+                    $(tombol).prop("disabled", false);
+                    $(tombol).html("Submit");
+                }, 2000);
+            }
+        },
+    });
+    return false;
+
+}
+function handle_open_modal(url, modal, content) {
     $.ajax({
         type: "GET",
         url: url,
@@ -130,7 +127,7 @@ function handle_open_modal(url,modal,content){
         },
     });
 }
-function handle_delete(url){
+function handle_delete(url) {
     $.confirm({
         animationSpeed: 1000,
         animation: 'zoom',
@@ -147,16 +144,16 @@ function handle_delete(url){
         buttons: {
             Ya: {
                 btnClass: 'btn-red any-other-class',
-                action: function(){
+                action: function () {
                     $.ajax({
-                        type:"DELETE",
+                        type: "DELETE",
                         url: url,
                         dataType: "json",
-                        success:function(response){
+                        success: function (response) {
                             if (response.alert == "success") {
                                 success_message(response.message);
                                 load_list(1);
-                            }else{
+                            } else {
                                 error_message(response.message);
                                 load_list(1);
                             }
@@ -171,7 +168,7 @@ function handle_delete(url){
         }
     });
 }
-function handle_confirm(title, confirm_title, deny_title, method, route){
+function handle_confirm(title, confirm_title, deny_title, method, route) {
     Swal.fire({
         title: title,
         showDenyButton: true,
@@ -184,13 +181,11 @@ function handle_confirm(title, confirm_title, deny_title, method, route){
                 type: method,
                 url: route,
                 dataType: 'json',
-                success: function(response) {
-                    if(response.redirect == "input"){
-                        load_input(response.route);
-                    }else{
-                        load_list(1);
-                    }
-                    Swal.fire(response.message, '', response.alert)
+                success: function (response) {
+                    Swal.fire(response.message, '', 'success')
+                        .then(() => {
+                            location.reload();
+                        });
                 }
             });
         } else if (result.isDenied) {
@@ -198,7 +193,7 @@ function handle_confirm(title, confirm_title, deny_title, method, route){
         }
     });
 }
-function handle_save_password(tombol, form, url, method){
+function handle_save_password(tombol, form, url, method) {
     $(tombol).submit(function () {
         return false;
     });
@@ -210,16 +205,16 @@ function handle_save_password(tombol, form, url, method){
         url: url,
         data: data,
         dataType: 'json',
-        beforeSend: function() {
-            
+        beforeSend: function () {
+
         },
         success: function (response) {
-            if (response.alert=="success") {
+            if (response.alert == "success") {
                 success_message(response.message);
                 $(form)[0].reset();
                 setTimeout(function () {
                     $(tombol).prop("disabled", false);
-                      location.href = response.route;
+                    location.href = response.route;
                 }, 2000);
             } else {
                 error_message(response.message);

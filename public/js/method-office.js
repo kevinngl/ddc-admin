@@ -4,8 +4,8 @@ $("body").on("contextmenu", "img", function (e) {
 $("img").attr("draggable", false);
 $.ajaxSetup({
     headers: {
-        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-    },
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
 });
 $(document).ready(function () {
     $(window).keydown(function (event) {
@@ -114,7 +114,7 @@ function handle_confirm(title, confirm_title, deny_title, method, route) {
                 },
             });
         } else if (result.isDenied) {
-            Swal.fire("Konfirmasi dibatalkan", "", "info");
+            Swal.fire("Status Diubah", "", "info");
         }
     });
 }
@@ -140,7 +140,7 @@ function handle_post(tombol, form, url, method) {
         url: url,
         data: data,
         dataType: "json",
-        beforeSend: function () {},
+        beforeSend: function () { },
         success: function (response) {
             if (response.alert == "success") {
                 success_toastr(response.message);
@@ -172,7 +172,7 @@ function handle_save_password(tombol, form, url, method) {
         url: url,
         data: data,
         dataType: "json",
-        beforeSend: function () {},
+        beforeSend: function () { },
         success: function (response) {
             if (response.alert == "success") {
                 success_toastr(response.message);
@@ -205,7 +205,7 @@ function handle_save(tombol, form, url, method) {
         url: url,
         data: data,
         dataType: "json",
-        beforeSend: function () {},
+        beforeSend: function () { },
         success: function (response) {
             loaded();
             if (response.alert == "success") {
@@ -245,7 +245,7 @@ function handle_save_modal(tombol, form, url, method, modal) {
         url: url,
         data: data,
         dataType: "json",
-        beforeSend: function () {},
+        beforeSend: function () { },
         success: function (response) {
             loaded();
             if (response.alert == "success") {
@@ -284,7 +284,7 @@ function handle_upload(tombol, form, url, method) {
             resetForm: true,
             processData: false,
             dataType: "json",
-            beforeSend: function () {},
+            beforeSend: function () { },
             success: function (response) {
                 loaded();
                 if (response.alert == "success") {

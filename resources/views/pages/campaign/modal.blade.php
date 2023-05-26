@@ -20,11 +20,7 @@
     <form id="form_create_donation" enctype="multipart/form-data">
         @csrf
         <div class="mb-13 text-center">
-            @if (session('user')->user->role->name === 'supervisor')
-                <h1 class="mb-3">Tinjau Program Donasi</h1>
-            @else
-                <h1 class="mb-3">Kelola Program Donasi</h1>
-            @endif
+            <h1 class="mb-3">Tambah Program Donasi</h1>
         </div>
 
         <div class="fv-row mb-7">
@@ -32,9 +28,9 @@
             <select class="form-control selectpicker " name="campaignCategoryId" required>
                 <option selected disabled>Pilih Kategori</option>
                 @foreach ($category as $item)
-                    {{-- <option value="{{ $item['id'] }}"{{ $item['id'] == $campaign['campaignCategoryId'] ? 'selected' : '' }}>{{ $item['name'] }}</option> --}}
                     <option value="{{ $item['id'] }}">
-                        {{ $item['name'] }}</option>
+                        {{ $item['name'] }}
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -65,8 +61,7 @@
             <!--end::Label-->
             <!--begin::Input-->
             <input type="tel" id="donationTarget" name="donationTarget"
-                class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Masukan target nominal"
-                value="" />
+                class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Masukan target nominal" />
             <!--end::Input-->
         </div>
 
@@ -85,68 +80,23 @@
             <label for="#" class="required fw-bold fs-6 mb-2">Gambar</label>
             <br>
             <!--begin::Label-->
-            <img src="#" alt="test" height="230px">
             <!--end::Label-->
             <!--begin::Input-->
-            <input type="file" class="form-control" name="#" placeholder="Upload gambar"
-                aria-label="First name" class="form-control form-control-solid mb-3 mb-lg-0">
+            <input type="file" class="form-control" name="image" placeholder="Upload gambar"
+                aria-label="Upload gambar" class="form-control form-control-solid mb-3 mb-lg-0">
             <!--end::Input-->
         </div>
 
         @if (session('user')->user->role->name === 'admin')
-            <div class="fv-row mb-7">
-                @if (empty($campaign['notes']))
-                    {{-- <label for="nama_users" class="required fw-bold fs-6 mb-2">Komentar Supervisor</label>
-                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" id="" cols="10" rows="3">Belum ada komentar</textarea> --}}
-                @else
-                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="comment" id="" cols="10"
-                        rows="3">{{ $campaign['notes'] }}</textarea>
-                @endif
-            </div>
-        @endif
-
-        @if (session('user')->user->role->name === 'supervisor')
-
-            <div class="fv-row mb-7">
-                <label for="nama_users" class="fw-bold fs-6 mb-2">Berikan Komentar (Alasan Setuju/Tolak): </label>
-                <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="comment" id="" cols="10"
-                    rows="3"></textarea>
-            </div>
-
-
             <div class="text-center pt-15">
+                <div id="kt_modal_update_cancel" class="btn btn-light me-3" data-bs-dismiss="modal">
+                    Discard
+                </div>
                 <button id="tombol_kirim_donation"
-                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.accept') }}','#ModalCreateDonation','POST');"
-                    class="btn btn-success mx-5">
-                    Setuju
+                    onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.store') }}','#ModalCreatedonation','POST');"
+                    class="btn btn-primary">
+                    Submit
                 </button>
-                <button id="tombol_kirim_donation"
-                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.deny') }}','#ModalCreateDonation','POST');"
-                    class="btn btn-danger mx-5">
-                    Tolak
-                </button>
-            </div>
-        @else
-            <div class="text-center pt-15">
-                @if (empty($campaign['id']))
-                    <div id="kt_modal_update_cancel" class="btn btn-light me-3" data-bs-dismiss="modal">
-                        Discard
-                    </div>
-                    <button id="tombol_kirim_donation"
-                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.store') }}','#ModalCreatedonation','POST');"
-                        class="btn btn-primary">
-                        Submit
-                    </button>
-                @else
-                    <div id="kt_modal_update_cancel" class="btn btn-light me-3" data-bs-dismiss="modal">
-                        Discard
-                    </div>
-                    <button id="tombol_kirim_donation"
-                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.update') }}','#ModalCreatedonation','POST');"
-                        class="btn btn-primary">
-                        Submit
-                    </button>
-                @endif
             </div>
         @endif
     </form>

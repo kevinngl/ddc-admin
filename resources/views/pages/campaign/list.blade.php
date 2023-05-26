@@ -25,7 +25,7 @@
                     <td>{{ strftime('%e %B %Y', strtotime($item['startDate'])) }} to
                         {{ strftime('%e %B %Y', strtotime($item['endDate'])) }}</td>
                     <td>Rp. {{ number_format($item['donationTarget']) }}</td>
-                    <td>{{ strftime('%e %B %Y, %H:%M', strtotime($item['createdAt'])) }} WIB</td>
+                    <td>{{ date('Y-m-d h:i', strtotime($item['createdAt'])) }} WIB</td>
                     <td>{{ $item['pic']['name'] ?? 'N/A' }}</td>
                     <td>
                         @if ($item['status'] === 'approved')
@@ -40,10 +40,8 @@
                     </td>
                     <td>
                         <div class="btn-group" role="group">
-
                             <a href="{{ route('campaign.detail', $item['id']) }}"
                                 class="btn btn-sm btn-light btn-active-light-primary">Lihat</a>
-
                         </div>
                     </td>
                     <!--end::Action=-->

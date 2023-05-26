@@ -1,21 +1,14 @@
     <!--begin::Table-->
-    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_cash">
+    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_donation">
         <!--begin::Table head-->
         <thead>
             <!--begin::Table row-->
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                {{-- <th class="w-10px pe-2">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                        <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1" />
-                    </div>
-                </th> --}}
-                <th class="min-w-125px">Nama Sumber Donasi</th>
-                <th class="min-w-125px">Tujuan Program Donasi</th>
+                <th class="min-w-125px">Nama Program</th>
+                <th class="min-w-125px">Catatan</th>
                 <th class="min-w-125px">Total Donasi</th>
-                <th class="min-w-125px">Dibuat Oleh</th>
-                <th class="min-w-125px">Dibuat Tanggal</th>
-                <th class="min-w-125px">Status</th>
-                <th class="min-w-125px">Aksi</th>
+                <th class="min-w-125px">Waktu Transaksi</th>
+                <th class="min-w-125px">Donatur</th>
             </tr>
             <!--end::Table row-->
         </thead>
@@ -25,46 +18,52 @@
             <!--begin::Table row-->
             @foreach ($data as $item)
                 <tr>
-                    <!--begin::Role=-->
-                    <td>{{ $item['source'] }}</td>
-
-                    <td>{{ $item['title'] }}</td>
-                    <td>Rp. {{ number_format($item['total']) }}</td>
-                    <td>{{ $item['pic_name'] }}</td>
-                    <td>{{ $item['created_at'] }}</td>
-                    <!--begin::Action=-->
-                    <td>
-                        <div class="btn-group" role="group">
-                            @if ($item['status'] == 'accepted')
-                                <button id="aksi" type="button" class="btn btn-sm btn-success ">
-                                    Diterima
-                                </button>
-                            @elseif ($item['source'] == 'denied')
-                                <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('donation.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
-                                    class="btn btn-sm btn-danger ">Perbaiki</a>
-                            @else
-                                <button id="aksi" type="button" class="btn btn-sm btn-warning">
-                                    Menunggu
-                                </button>
-                            @endif
-                        </div>
                     </td>
-                    <td>
-                        <div class="btn-group" role="group">
-                            <button id="aksi" type="button" class="btn btn-sm btn-light btn-active-light-primary">
-                                <a href="javascript:;"
-                                    onclick="handle_open_modal('{{ route('donation.edit', $item['id']) }}','#ModalCreateDonation','#contentDonationModal');"
-                                    class="menu-link px-3">Lihat</a>
-                            </button>
-                        </div>
-                    </td>
+                    <td>{{ $item['campaign']['title'] }}</td>
+                    <td>{{ $item['comment'] }}</td>
+                    <td>Rp. {{ number_format($item['payment']['amount']) }}</td>
+                    <td>{{ strftime('%e %B %Y, %H:%M', strtotime($item['payment']['transactionTime'])) }} WIB</td>
+                    <td>{{ $item['donator']['name'] }}</td>
                     <!--end::Action=-->
                 </tr>
             @endforeach
+            @if (empty($data))
+                <tr>
+                    <td colspan="4" class="text-center">Belum ada donasi masuk</td>
+                </tr>
+            @endif
             <!--end::Table row-->
         </tbody>
         <!--end::Table body-->
     </table>
     <!--end::Table-->
-    {{ $data->links() }}
+
+    <div class="row">
+        <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
+        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+            <div class="dataTables_paginate paging_simple_numbers" id="kt_table_users_paginate">
+                <ul class="pagination">
+                    <li class="page-item {{ $data->previousPageUrl() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->previousPageUrl() }}">Previous</a>
+                    </li>
+
+                    @php
+                        $currentPage = $data->currentPage();
+                        $lastPage = $data->lastPage();
+                        $startPage = max($currentPage - 1, 1);
+                        $endPage = min($currentPage + 1, $lastPage);
+                    @endphp
+
+                    @for ($page = $startPage; $page <= $endPage; $page++)
+                        <li class="page-item {{ $data->currentPage() == $page ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $data->url($page) }}">{{ $page }}</a>
+                        </li>
+                    @endfor
+
+                    <li class="page-item {{ $data->nextPageUrl() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $data->nextPageUrl() }}">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>

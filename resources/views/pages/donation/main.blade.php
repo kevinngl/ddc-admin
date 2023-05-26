@@ -1,4 +1,6 @@
-<x-office-layout title="cash">
+<x-office-layout title="Donation">
+    <!--begin::Toolbar-->
+
     <div id="content_list">
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <div id="kt_content_container" class="container-xxl">
@@ -18,9 +20,9 @@
                                                 fill="black" />
                                         </svg>
                                     </span>
-                                    <input type="text" name="keywords" onkeyup="load_list(1);"
+                                    <input type="text" id="search-donasi"
                                         class="form-control form-control-solid w-250px ps-15"
-                                        placeholder="Cari data..." />
+                                        placeholder="Cari judul..." />
                                 </div>
                             </div>
                             <div class="card-toolbar">
@@ -43,7 +45,7 @@
                                                         rx="1" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->Tambah Donasi Tunai
+                                            <!--end::Svg Icon-->Buat Donasi
                                         </button>
                                     @endif
                                     <!--end::Add user-->
@@ -146,7 +148,7 @@
                     </form>
                     <div class="card-body pt-0">
                         <div class="table-responsive">
-                            <div id="list_result"></div>
+                            @include('pages.donation.list')
                         </div>
                     </div>
                 </div>
@@ -154,9 +156,18 @@
         </div>
     </div>
     <div id="content_input"></div>
-    @section('custom_js')
-        <script>
-            load_list(1);
-        </script>
-    @endsection
+    <script>
+        document.getElementById('search-donasi').addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) { // Enter key pressed
+                event.preventDefault();
+                var searchQuery = this.value.trim();
+
+                // Generate the new URL with additional query parameter
+                var newUrl = "{{ url()->current() }}" + "?title=" + encodeURIComponent(searchQuery);
+
+                // Redirect to the new URL
+                window.location.href = newUrl;
+            }
+        });
+    </script>
 </x-office-layout>

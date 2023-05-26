@@ -12,7 +12,6 @@ Route::group(['domain' => ''], function() {
     Route::get('/',[AuthController::class, 'index'])->name('auth');
     Route::get('auth',[AuthController::class, 'index'])->name('auth');
         Route::post('login',[AuthController::class, 'do_login'])->name('login'); 
-                   
         Route::middleware(['checkAuthToken'])->group(function(){
             Route::get('logout',[AuthController::class, 'do_logout'])->name('logout');
         
@@ -35,18 +34,17 @@ Route::group(['domain' => ''], function() {
                 Route::get('edit/{id}',  [CampaignController::class, 'edit'])->name('edit');
                 Route::post('store',     [CampaignController::class, 'store'])->name('store');
                 Route::put('update/{id}',   [CampaignController::class, 'update'])->name('update');
-                Route::delete('destroy/{campaign}', [CampaignController::class, 'destroy'])->name('destroy');
-                Route::post('accept/{campaign}',  [CampaignController::class, 'accept'])->name('accept');
-                Route::post('reject/{campaign}',  [CampaignController::class, 'reject'])->name('reject');
-                Route::post('revise/{campaign}',  [CampaignController::class, 'revise'])->name('revise');
+                Route::put('approve/{id}',  [CampaignController::class, 'approve'])->name('approve');
+                Route::put('reject/{id}',  [CampaignController::class, 'reject'])->name('reject');
+                Route::put('revise/{id}',  [CampaignController::class, 'revise'])->name('revise');
             });
             Route::prefix('category')->name('category.')->group(function(){
                 Route::get('list',  [CampaignCategoryController::class, 'index'])->name('list');
                 Route::get('create',[CampaignCategoryController::class, 'create'])->name('create');
-                Route::get('edit/{category}',  [CampaignCategoryController::class, 'edit'])->name('edit');
+                Route::get('edit/{id}',  [CampaignCategoryController::class, 'edit'])->name('edit');
                 Route::post('store',[CampaignCategoryController::class, 'store'])->name('store');
-                Route::post('update/{category}',   [CampaignCategoryController::class, 'update'])->name('update');
-                Route::delete('destroy/{category}', [CampaignCategoryController::class, 'destroy'])->name('destroy');
+                Route::put('update/{id}',   [CampaignCategoryController::class, 'update'])->name('update');
+                Route::delete('destroy/{id}', [CampaignCategoryController::class, 'destroy'])->name('destroy');
             });
             Route::prefix('users')->name('users.')->group(function(){
                 Route::get('',  [UserController::class, 'index'])->name('index');

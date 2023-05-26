@@ -45,7 +45,7 @@
                                                         rx="1" />
                                                 </svg>
                                             </span>
-                                            <!--end::Svg Icon-->Tambah Program Donasi
+                                            <!--end::Svg Icon-->Tambah Kampanye
                                         </button>
                                     @endif
                                     <!--end::Add user-->

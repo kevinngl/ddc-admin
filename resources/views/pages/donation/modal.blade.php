@@ -1,13 +1,11 @@
-<!--begin::Modal header-->
 <div class="modal-header pb-0 border-0 justify-content-end">
-    <!--begin::Close-->
     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
         <!--begin::Svg Icon | path: icons/duotone/Navigation/Close.svg-->
         <span class="svg-icon svg-icon-1">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                 viewBox="0 0 24 24" version="1.1">
                 <g transform="translate(12.000000, 12.000000) rotate(-45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)"
-                    fill="#000000">78
+                    fill="#000000">
                     <rect fill="#000000" x="0" y="7" width="16" height="2" rx="1" />
                     <rect fill="#000000" opacity="0.5"
                         transform="translate(8.000000, 8.000000) rotate(-270.000000) translate(-8.000000, -8.000000)"
@@ -17,133 +15,153 @@
         </span>
         <!--end::Svg Icon-->
     </div>
-    <!--end::Close-->
 </div>
-<!--begin::Modal header-->
-<!--begin::Modal body-->
 <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-    <!--begin:Form-->
-    <form id="form_create_donation">
+    <form id="form_create_donation" enctype="multipart/form-data">
         @csrf
-        <!--begin::Heading-->
         <div class="mb-13 text-center">
-            <!--begin::Title-->
-            @if (Auth::user()->role == 'supervisor')
-                <h1 class="mb-3">Tinjau Donasi Tunai</h1>
+            @if (session('user')->user->role->name === 'supervisor')
+                <h1 class="mb-3">Tinjau Program Donasi</h1>
             @else
-                <h1 class="mb-3">Kelola Donasi Tunai</h1>
+                <h1 class="mb-3">Kelola Program Donasi</h1>
             @endif
-            <!--end::Title-->
         </div>
-        <!--end::Heading-->
-        <!--begin::Input group-->
+
         <div class="fv-row mb-7">
-            <!--begin::Label-->
-            <label for="nama_users" class="required fw-bold fs-6 mb-2">Nama Sumber donasi</label>
-            <!--end::Label-->
-            <!--begin::Input-->
-            <input type="text" id="nama_users" name="tcs_source" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan Nama Sumber donasi" value="{{ $donation->tcs_source }}" />
-            <!--end::Input-->
-        </div>
-        <!--end::Input group-->
-        <!--begin::Input group-->
-        <div class="fv-row mb-7">
-            <!--begin::Label-->
-            <label for="nama_users" class="required fw-bold fs-6 mb-2">Pilih Tujuan Donasi</label>
-            <!--end::Label-->
-            <!--begin::Input-->
-            <select class="form-control selectpicker" name="id_donation" required>
-                <option selected disabled>Pilih Tujuan</option>
-                @foreach ($donation as $item)
-                    <option value="{{ $item->id }}" {{ $item->id == $donation->id_donation ? 'selected' : '' }}>
-                        {{ $item->td_title }}</option>
+            <label for="nama_users" class="required fw-bold fs-6 mb-2">Pilih Kategori Donasi</label>
+            <select class="form-control selectpicker " name="campaignCategoryId" required>
+                <option selected disabled>Pilih Kategori</option>
+                @foreach ($category as $item)
+                    {{-- <option value="{{ $item['id'] }}"{{ $item['id'] == $campaign['campaignCategoryId'] ? 'selected' : '' }}>{{ $item['name'] }}</option> --}}
+                    <option value="{{ $item['id'] }}">
+                        {{ $item['name'] }}</option>
                 @endforeach
             </select>
-            <!--end::Input-->
         </div>
-        <!--end::Input group-->
-        <!--begin::Input group-->
+
         <div class="fv-row mb-7">
             <!--begin::Label-->
-            <label for="nama_users" class="required fw-bold fs-6 mb-2">Total Donasi (Rp)</label>
+            <label for="title" class="required fw-bold fs-6 mb-2">Judul Program</label>
             <!--end::Label-->
             <!--begin::Input-->
-            <input type="tel" id="tcs_total" name="tcs_total" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan Total Donasi" value="{{ $donation->tcs_total }}" />
+            <input type="text" id="title" name="title" class="form-control form-control-solid mb-3 mb-lg-0"
+                placeholder="Masukan judul program" />
             <!--end::Input-->
         </div>
-        <!--end::Input group-->
-        <!--begin::Input group-->
-        @if (Auth::user()->role == 'admin')
+
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
+            <label for="description" class="required fw-bold fs-6 mb-2">Deskripsi</label>
+            <!--d::Label-->
+            <!--begin::Input-->
+            <textarea name="description" id="description" cols="30" rows="5"
+                class="form-control form-control-solid mb-3 mb-lg-0"></textarea>
+            <!--end::Input-->
+        </div>
+
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
+            <label for="donationTarget" class="required fw-bold fs-6 mb-2">Target Dana (Rp)</label>
+            <!--end::Label-->
+            <!--begin::Input-->
+            <input type="tel" id="donationTarget" name="donationTarget"
+                class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Masukan target nominal"
+                value="" />
+            <!--end::Input-->
+        </div>
+
+        <div class="fv-row mb-7">
+            <!--begin::Label-->
+            <label for="duration" class="required fw-bold fs-6 mb-2">Batas Waktu</label>
+            <!--end::Label-->
+            <!--begin::Input-->
+            <input id="kt_daterangepicker_2" name="duration" class="form-control form-control-solid"
+                placeholder="Masukan batas waktu" />
+
+            <!--end::Input-->
+        </div>
+
+        <div class="fv-row mb-7">
+            <label for="#" class="required fw-bold fs-6 mb-2">Gambar</label>
+            <br>
+            <!--begin::Label-->
+            <img src="#" alt="test" height="230px">
+            <!--end::Label-->
+            <!--begin::Input-->
+            <input type="file" class="form-control" name="image" placeholder="Upload gambar"
+                aria-label="First name" class="form-control form-control-solid mb-3 mb-lg-0">
+            <!--end::Input-->
+        </div>
+
+        @if (session('user')->user->role->name === 'admin')
             <div class="fv-row mb-7">
-                <!--begin::Label-->
-                <label for="nama_users" class="required fw-bold fs-6 mb-2">Komentar Supervisor</label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                @if (empty($donation->comment))
-                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="comment" id="" cols="10"
-                        rows="3">Belum ada komentar</textarea>
+                @if (empty($campaign['notes']))
+                    {{-- <label for="nama_users" class="required fw-bold fs-6 mb-2">Komentar Supervisor</label>
+                    <textarea class="form-control form-control-solid mb-3 mb-lg-0" id="" cols="10" rows="3">Belum ada komentar</textarea> --}}
                 @else
                     <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="comment" id="" cols="10"
-                        rows="3">{{ $donation->comment }}</textarea>
+                        rows="3">{{ $campaign['notes'] }}</textarea>
                 @endif
-                <!--end::Input-->
             </div>
         @endif
-        <!--end::Input group-->
-        <!--begin::Actions-->
-        @if (Auth::user()->role == 'supervisor')
-            <!--begin::Input group-->
+
+        @if (session('user')->user->role->name === 'supervisor')
+
             <div class="fv-row mb-7">
-                <!--begin::Label-->
-                <label for="nama_users" class="fw-bold fs-6 mb-2">Berikan Komentar: </label>
-                <!--end::Label-->
+                <label for="nama_users" class="fw-bold fs-6 mb-2">Berikan Komentar (Alasan Setuju/Tolak): </label>
                 <textarea class="form-control form-control-solid mb-3 mb-lg-0" name="comment" id="" cols="10"
                     rows="3"></textarea>
             </div>
-            <!--end::Input group-->
+
 
             <div class="text-center pt-15">
                 <button id="tombol_kirim_donation"
-                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('donation.accept', $donation->id) }}','#ModalCreateDonation','POST');"
+                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.accept') }}','#ModalCreateDonation','POST');"
                     class="btn btn-success mx-5">
                     Setuju
                 </button>
                 <button id="tombol_kirim_donation"
-                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('donation.deny', $donation->id) }}','#ModalCreateDonation','POST');"
+                    onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.deny') }}','#ModalCreateDonation','POST');"
                     class="btn btn-danger mx-5">
                     Tolak
                 </button>
             </div>
         @else
             <div class="text-center pt-15">
-                @if ($donation->id)
+                @if (empty($campaign['id']))
+                    <div id="kt_modal_update_cancel" class="btn btn-light me-3" data-bs-dismiss="modal">
+                        Discard
+                    </div>
                     <button id="tombol_kirim_donation"
-                        onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('donation.update', $donation->id) }}','#ModalCreateDonation','POST');"
+                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.store') }}','#ModalCreatedonation','POST');"
                         class="btn btn-primary">
                         Submit
                     </button>
                 @else
+                    <div id="kt_modal_update_cancel" class="btn btn-light me-3" data-bs-dismiss="modal">
+                        Discard
+                    </div>
                     <button id="tombol_kirim_donation"
-                        onclick="save_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('donation.store') }}','#ModalCreateDonation','POST');"
+                        onclick="upload_form_modal('#tombol_kirim_donation','#form_create_donation','{{ route('campaign.update') }}','#ModalCreatedonation','POST');"
                         class="btn btn-primary">
                         Submit
                     </button>
                 @endif
             </div>
         @endif
-        <!--end::Actions-->
     </form>
-    <!--end:Form-->
 </div>
-<!--end::Modal body-->
 
 
 <script>
-    ribuan('tcs_total');
+    ribuan('donationTarget');
     var loadFile = function(event) {
         var image = document.getElementById('output');
         image.src = URL.createObjectURL(event.target.files[0]);
     };
+    $("#kt_daterangepicker_2").flatpickr({
+        mode: "range",
+        minDate: "today",
+        dateFormat: "Y-m-d",
+    });
 </script>

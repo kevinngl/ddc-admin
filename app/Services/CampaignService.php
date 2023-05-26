@@ -34,11 +34,11 @@ class CampaignService
             'limit' => $params['limit'] ?? 10,
         ];
 
-        if ($params['title']) {
+        if (isset($params['title'])) {
             $queryParams['title'] = $params['title'];
         }
 
-        if ($params['categoryId']) {
+        if (isset($params['categoryId'])) {
             $queryParams['categoryId'] = $params['categoryId'];
         }
 
@@ -57,35 +57,35 @@ class CampaignService
 
     public function update($id, $data)
     {
-        $url = $this->baseUrl . '/campaign/update/:' . $id;
-        $response = $this->httpCurl->put(json_encode($data), $url);
+        $url = $this->baseUrl . '/campaign/update/' . $id;
+        $response = $this->httpCurl->put($data, $url);
         return json_decode($response, true);
     }
 
     public function approve($id)
     {
-        $url = $this->baseUrl . '/campaign/approve/:' . $id;
-        $response = $this->httpCurl->post(null, $url);
+        $url = $this->baseUrl . '/campaign/approve/' . $id;
+        $response = $this->httpCurl->put([], $url);
         return json_decode($response, true);
     }
 
     public function reject($id)
     {
-        $url = $this->baseUrl . '/campaign/reject/:' . $id;
-        $response = $this->httpCurl->post(null, $url);
+        $url = $this->baseUrl . '/campaign/reject/' . $id;
+        $response = $this->httpCurl->put([], $url);
         return json_decode($response, true);
     }
 
     public function revise($id, $data)
     {
-        $url = $this->baseUrl . '/campaign/revise/:' . $id;
-        $response = $this->httpCurl->post(json_encode($data), $url);
+        $url = $this->baseUrl . '/campaign/revise/' . $id;
+        $response = $this->httpCurl->put($data, $url);
         return json_decode($response, true);
     }
     public function setToLive($id)
     {
-        $url = $this->baseUrl . '/campaigns/set-to-live/:' . $id;
-        $response = $this->httpCurl->post(null, $url);
+        $url = $this->baseUrl . '/campaigns/set-to-live/' . $id;
+        $response = $this->httpCurl->put([], $url);
         return json_decode($response, true);
     }
 }

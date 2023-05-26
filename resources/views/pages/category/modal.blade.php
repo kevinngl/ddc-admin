@@ -28,10 +28,10 @@
         <!--begin::Heading-->
         <div class="mb-13 text-center">
             <!--begin::Title-->
-            @if ($category['id'])
-                <h1 class="mb-3">Edit Category</h1>
+            @if (isset($category['id']))
+                <h1 class="mb-3">Ubah Kategori Kampanye</h1>
             @else
-                <h1 class="mb-3">Add Category</h1>
+                <h1 class="mb-3">Tambah Kategori Kampanye</h1>
             @endif
             <!--end::Title-->
         </div>
@@ -41,7 +41,7 @@
             <!--begin::Label-->
             <label for="tc_title" class="required fw-bold fs-6 mb-2">Nama Kategori</label>
             <input type="text" id="tc_title" name="name" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan data" value="{{ $category['name'] }}" />
+                placeholder="Masukan data" value="{{ $category['name'] ?? '' }}" />
         </div>
         <!--end::Input group-->
         <!--begin::Input group-->
@@ -49,14 +49,14 @@
             <!--begin::Label-->
             <label for="tc_title" class="required fw-bold fs-6 mb-2">Deskripsi</label>
             <input type="text" id="tc_title" name="description" class="form-control form-control-solid mb-3 mb-lg-0"
-                placeholder="Masukan data" value="{{ $category['description'] }}" />
+                placeholder="Masukan data" value="{{ $category['description'] ?? '' }}" />
         </div>
         <!--end::Input group-->
         <!--begin::Actions-->
         <div class="text-center pt-15">
             @if (isset($category['id']))
                 <button id="tombol_kirim_category"
-                    onclick="save_form_modal('#tombol_kirim_category','#form_create_category','{{ route('category.update', $category['id']) }}','#ModalCreateCategory','POST');"
+                    onclick="save_form_modal('#tombol_kirim_category','#form_create_category','{{ route('category.update', $category['id']) }}','#ModalCreateCategory','PUT');"
                     class="btn btn-primary">
                     Submit
                 </button>

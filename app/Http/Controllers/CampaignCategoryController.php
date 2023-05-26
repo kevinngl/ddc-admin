@@ -17,6 +17,7 @@ class CampaignCategoryController extends Controller
     public function __construct(){
         $this->categoryService = new CategoryService();
     }
+
     public function index(Request $request)
     {
         $response = $this->categoryService->list($request);
@@ -38,6 +39,7 @@ class CampaignCategoryController extends Controller
         );
         return view('pages.category.main', compact('data'));
     }
+
     public function create(Request $request)
     {
         $response = $this->categoryService->list($request);
@@ -47,6 +49,7 @@ class CampaignCategoryController extends Controller
 
         return view('pages.category.modal', compact('category'));
     }
+
     public function edit($id)
     {
         $response = $this->categoryService->list([
@@ -64,6 +67,30 @@ class CampaignCategoryController extends Controller
     
         return view('pages.category.modal', compact('category'));
     }
+
+    public function update($id, Request $request )
+    {
+        $name = $request['name'];
+        $description = $request['description'];
+        $payload = [
+            'name' => $name,
+            'description' => $description,
+        ];
+
+        $response = $this->categoryService->update($id, $payload);
+        if ($response['success']) {
+            return response()->json([
+                'alert' => 'success',
+                'message' => 'Kategori '. $request['name'] . ' telah didaftarkan',
+            ]);
+        } else {
+            return response()->json([
+                'alert' => 'error',
+                'message' => 'Maaf, sepertinya ada yang salah, silahkan coba lagi.',
+            ]);
+        }
+    }
+
     public function store(Request $request)
     {
         

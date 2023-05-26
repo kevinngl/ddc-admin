@@ -50,8 +50,8 @@ class CategoryService
 
     public function update($id, $data)
     {
-        $url = $this->baseUrl . '/category/' . $id;
-        $response = $this->httpCurl->put(json_encode($data), $url);
+        $url = $this->baseUrl . '/category/update/' . $id;
+        $response = $this->httpCurl->put($data, $url);
         return json_decode($response, true);
     }
 

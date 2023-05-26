@@ -31,16 +31,6 @@
                     </a>
                 </div>
                 <div class="menu-item py-2">
-                    <a class="menu-link menu-center {{ request()->is('campaign') ? 'active' : '' }}"
-                        href="{{ route('campaign.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
-                        data-bs-placement="right">
-                        <span class="menu-icon me-0">
-                            <i class="bi bi-file-text fs-2"></i>
-                        </span>
-                        <span class="menu-title">Kampanye</span>
-                    </a>
-                </div>
-                <div class="menu-item py-2">
                     <a class="menu-link menu-center {{ request()->is('donation') ? 'active' : '' }}"
                         href="{{ route('donation.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
                         data-bs-placement="right">
@@ -50,6 +40,17 @@
                         <span class="menu-title">Donasi</span>
                     </a>
                 </div>
+                <div class="menu-item py-2">
+                    <a class="menu-link menu-center {{ request()->is('campaign') ? 'active' : '' }}"
+                        href="{{ route('campaign.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
+                        data-bs-placement="right">
+                        <span class="menu-icon me-0">
+                            <i class="bi bi-file-text fs-2"></i>
+                        </span>
+                        <span class="menu-title">Kampanye</span>
+                    </a>
+                </div>
+
                 @if (session('user')->user->role->name === 'admin')
                     <div class="menu-item py-2">
                         <a class="menu-link menu-center {{ request()->is('category.list') ? 'active' : '' }}"
@@ -62,7 +63,7 @@
                         </a>
                     </div>
                 @endif
-                @if (session('user')->user->role->name === 'supervisor')
+                {{-- @if (session('user')->user->role->name === 'supervisor')
                     <div class="menu-item py-2">
                         <a class="menu-link menu-center {{ request()->is('users') ? 'active' : '' }}"
                             href="{{ route('users.index') }}" data-bs-trigger="hover" data-bs-dismiss="click"
@@ -73,7 +74,7 @@
                             <span class="menu-title">Role Pengguna</span>
                         </a>
                     </div>
-                @endif
+                @endif --}}
 
             </div>
 
