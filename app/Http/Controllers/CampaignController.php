@@ -31,7 +31,7 @@ class CampaignController extends Controller
     public function detail($id, Request $request)
     {
         $responseCampaign = $this->campaignService->detail($id);
-
+       
         $responseDonation = $this->donationService->list([
             'campaignId' => $id,
             'page' => 1,

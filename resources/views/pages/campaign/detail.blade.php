@@ -11,11 +11,17 @@
         </div>
         @include('pages.campaign.modalUpdateCampaign')
         @include('pages.campaign.modalReviseCampaign')
+        @include('pages.campaign.modalDonation')
     </div>
     <!--end::Container-->
 </x-office-layout>
 <script>
     ribuan('donationTarget');
+    var loadFile = function(event) {
+        var image = document.getElementById('output');
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+    ribuan('amount');
     var loadFile = function(event) {
         var image = document.getElementById('output');
         image.src = URL.createObjectURL(event.target.files[0]);

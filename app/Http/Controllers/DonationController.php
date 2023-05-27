@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\DonationService;
+use App\Services\CategoryService;
 use App\Services\CampaignService;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,8 +18,11 @@ use Illuminate\Support\Collection;
 class DonationController extends Controller
 {
     public function __construct(){
+        $this->campaignService = new CampaignService();
+        $this->categoryService = new CategoryService();
         $this->donationService = new DonationService();
     }
+    
     
     public function index(Request $request)
     {
@@ -56,20 +60,23 @@ class DonationController extends Controller
     {
         $createdBy = session('user')->user->id;
         $campaignId = $request['campaignId'];
-        $donatorId = $request['donatorId'];
         $comment = $request['comment'];
+        $amount = Str::of($request['amount'])->replace(',','')?: 0;
+        $donatorId = $createdBy;
         $payload = [
             'campaignId' => $campaignId,
             'donatorId' => $donatorId,
             'comment' => $comment,
-            'createdBy' => $createdBy,
+            'amount' => $amount,
         ];
 
         $response = $this->donationService->create($payload);
+
+        // dd($response);
         if ($response['success']) {
             return response()->json([
                 'alert' => 'success',
-                'message' => 'Donasi untuk '. $request['campaignId'] . ' telah dibuat',
+                'message' => 'Donasi berhasil dicatat',
             ]);
         } else {
             return response()->json([

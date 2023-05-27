@@ -27,7 +27,7 @@
                             </div>
                             <div class="card-toolbar">
                                 <!--begin::Toolbar-->
-                                <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                                {{-- <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                     <!--begin::Add user-->
                                     @if (session('user')->user->role->name === 'admin')
                                         <button type="button" class="btn btn-primary"
@@ -49,7 +49,7 @@
                                         </button>
                                     @endif
                                     <!--end::Add user-->
-                                </div>
+                                </div> --}}
                                 <!--end::Toolbar-->
                                 <!--begin::Group actions-->
                                 <div class="d-flex justify-content-end align-items-center d-none"
