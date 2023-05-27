@@ -48,6 +48,7 @@
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
                                 <label class="fs-6 fw-bold mb-2">
+                                    {{-- test --}}
                                     <span>Ubah Gambar</span>
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                         title="Allowed file types: png, jpg, jpeg."></i>
