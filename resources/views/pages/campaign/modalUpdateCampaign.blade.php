@@ -4,7 +4,7 @@
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Form-->
-            <form class="form" action="#" id="form_update_campaign" enctype="multipart/form-data">
+            <form class="form" id="form_update_campaign" enctype="multipart/form-data">
                 @csrf
                 <!--begin::Modal header-->
                 <div class="modal-header" id="kt_modal_update_customer_header">
@@ -92,7 +92,7 @@
                             </div>
                             <!--end::Input group-->
                             <div class="fv-row mb-7">
-                                <label for="nama_users" class="required fw-bold fs-6 mb-2">Pilih Kategori
+                                <label for="nama_users" class="fw-bold fs-6 mb-2">Pilih Kategori
                                     Donasi</label>
                                 <select class="form-control selectpicker " name="campaignCategoryId" required>
                                     <option selected disabled>Pilih Kategori</option>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
-                                <label for="title" class="required fw-bold fs-6 mb-2">Judul Program</label>
+                                <label for="title" class="fw-bold fs-6 mb-2">Judul Program</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" id="title" name="title"
@@ -115,7 +115,7 @@
                             </div>
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
-                                <label for="duration" class="required fw-bold fs-6 mb-2">Batas Waktu</label>
+                                <label for="duration" class="fw-bold fs-6 mb-2">Batas Waktu</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input id="kt_daterangepicker_2" name="duration" class="form-control form-control-solid"
@@ -126,7 +126,7 @@
                             </div>
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
-                                <label for="donationTarget" class="required fw-bold fs-6 mb-2">Target Dana
+                                <label for="donationTarget" class="fw-bold fs-6 mb-2">Target Dana
                                     (Rp)</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
@@ -137,7 +137,7 @@
                             </div>
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
-                                <label for="description" class="required fw-bold fs-6 mb-2">Deskripsi</label>
+                                <label for="description" class="fw-bold fs-6 mb-2">Deskripsi</label>
                                 <!--d::Label-->
                                 <!--begin::Input-->
                                 <textarea name="description" id="description" cols="30" rows="5"
@@ -157,7 +157,7 @@
                         Discard
                     </div>
                     <button id="tombol_update_campaign"
-                        onclick="upload_form_modal('#tombol_update_campaign','#form_update_campaign','{{ route('campaign.update', $data['id']) }}','#ModalUpdateCampaign','PUT');"
+                        onclick="upload_form_modal('#tombol_update_campaign','#form_update_campaign','{{ route('campaign.update', $data['id']) }}','#ModalUpdateCampaign','POST');"
                         class="btn btn-primary">
                         Submit
                     </button>

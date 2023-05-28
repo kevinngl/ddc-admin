@@ -84,7 +84,7 @@ class CampaignService
     }
     public function setToLive($id)
     {
-        $url = $this->baseUrl . '/campaigns/set-to-live/' . $id;
+        $url = $this->baseUrl . '/campaign/go-live/' . $id;
         $response = $this->httpCurl->put([], $url);
         return json_decode($response, true);
     }

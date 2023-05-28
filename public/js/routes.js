@@ -81,17 +81,18 @@ function save_form_modal(tombol, form, url, modal, method) {
 
 }
 function upload_form_modal(tombol, form, url, modal, method) {
-    $(tombol).submit(function () {
-        return false;
-    });
-    let data = $(form).serialize();
-    $(tombol).prop("disabled", true);
-    $(tombol).html("Harap tunggu");
-    $.ajax({
+    var options = {
         type: method,
         url: url,
-        data: data,
-        dataType: 'json',
+        enctype: "multipart/form-data",
+        cache: false,
+        contentType: false,
+        resetForm: true,
+        processData: false,
+        dataType: "json",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         success: function (response) {
             if (response.alert == "success") {
                 success_message(response.message);
@@ -100,18 +101,20 @@ function upload_form_modal(tombol, form, url, modal, method) {
                 setTimeout(function () {
                     $(tombol).prop("disabled", false);
                     $(tombol).html("Submit");
-                    load_list(1);
+                    location.reload();
                 }, 2000);
             } else {
                 error_message(response.message);
                 setTimeout(function () {
                     $(tombol).prop("disabled", false);
                     $(tombol).html("Submit");
+                    location.reload();
                 }, 2000);
             }
         },
-    });
-    return false;
+    }
+
+    $(form).ajaxForm(options);
 
 }
 function handle_open_modal(url, modal, content) {

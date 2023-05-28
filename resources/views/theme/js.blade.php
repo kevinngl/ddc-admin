@@ -26,6 +26,8 @@
 <script src="{{ asset('assets/js/custom/apps/user-management/users/list/export-users.js') }}"></script>
 <script src="{{ asset('assets/js/custom/apps/user-management/users/list/table.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> --}}
+<script src="https://malsup.github.io/jquery.form.js"></script>
 <script>
     @if (Session::has('success'))
         alert('Password Berhasil Diubah');

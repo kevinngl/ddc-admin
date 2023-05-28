@@ -31,7 +31,7 @@ class CampaignController extends Controller
     public function detail($id, Request $request)
     {
         $responseCampaign = $this->campaignService->detail($id);
-       
+
         $responseDonation = $this->donationService->list([
             'campaignId' => $id,
             'page' => 1,
@@ -42,6 +42,7 @@ class CampaignController extends Controller
             'page' => 1,
             'limit' => 10,
         ]);
+
         $data = $responseCampaign["data"];
         $donation = $responseDonation["data"]["result"];
         $category = $responseCategory["data"]["result"];
@@ -154,14 +155,12 @@ class CampaignController extends Controller
 
     }
 
-    public function update($id, Request $request )
+    public function update($id, Request $request)
     {
-        // dd($request['donationTarget'], $request['title'], $request['campaignCategoryId']);
 
         $upload_image = null; // Initialize the variable outside the if condition
 
         $file = $request->file('image');
-        // dd($request->hasFile('image'));
         if ($request->hasFile('image')) {
         
             // Generate a unique name for the file
@@ -297,6 +296,22 @@ class CampaignController extends Controller
                 'message' => 'Maaf, sepertinya ada yang salah, silahkan coba lagi.',
             ]);
         }
+    }
+
+    public function setToLive($id)
+    {
+            $response = $this->campaignService->setToLive($id);
+            if ($response['success']) {
+                return response()->json([
+                    'alert' => 'success',
+                    'message' => 'Program kampanye '. ' telah aktif',
+                ]);
+            } else {
+                return response()->json([
+                    'alert' => 'error',
+                    'message' => 'Maaf, sepertinya ada yang salah, silahkan coba lagi.',
+                ]);
+            }
     }
     
 }

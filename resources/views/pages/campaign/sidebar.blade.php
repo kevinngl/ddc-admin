@@ -173,6 +173,12 @@
                             <a href="#" class="btn btn-sm btn-light-primary" data-bs-toggle="modal"
                                 data-bs-target="#ModalUpdateCampaign">Edit</a>
                         </span>
+                    @elseif ($data['status'] === 'approved')
+                        <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Edit customer details">
+                            <a href="javascript:;"
+                                onclick="handle_confirm('Apakah Anda Yakin Ingin Membuat Kampanye Menjadi Live?','Yakin','Tidak','PUT','{{ route('campaign.setToLive', $data['id']) }}');"
+                                class="menu-link px-3">Set To Live</a>
+                        </span>
                     @endif
                 @endif
             </div>

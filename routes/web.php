@@ -33,10 +33,11 @@ Route::group(['domain' => ''], function() {
                 Route::get('create',[CampaignController::class, 'create'])->name('create');
                 Route::get('edit/{id}',  [CampaignController::class, 'edit'])->name('edit');
                 Route::post('store',     [CampaignController::class, 'store'])->name('store');
-                Route::put('update/{id}',   [CampaignController::class, 'update'])->name('update');
+                Route::post('update/{id}',   [CampaignController::class, 'update'])->name('update');
                 Route::put('approve/{id}',  [CampaignController::class, 'approve'])->name('approve');
                 Route::put('reject/{id}',  [CampaignController::class, 'reject'])->name('reject');
                 Route::put('revise/{id}',  [CampaignController::class, 'revise'])->name('revise');
+                Route::put('setToLive/{id}',  [CampaignController::class, 'setToLive'])->name('setToLive');
             });
             Route::prefix('category')->name('category.')->group(function(){
                 Route::get('list',  [CampaignCategoryController::class, 'index'])->name('list');
