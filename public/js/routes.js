@@ -67,7 +67,7 @@ function save_form_modal(tombol, form, url, modal, method) {
                 setTimeout(function () {
                     $(tombol).prop("disabled", false);
                     $(tombol).html("Submit");
-                    load_list(1);
+                    location.reload();
                 }, 2000);
             } else {
                 error_message(response.message);

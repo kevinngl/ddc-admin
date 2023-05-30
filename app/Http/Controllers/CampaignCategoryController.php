@@ -93,7 +93,6 @@ class CampaignCategoryController extends Controller
 
     public function store(Request $request)
     {
-        
         $name = $request['name'];
         $description = $request['description'];
         $payload = [

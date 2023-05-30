@@ -25,7 +25,7 @@
                     <td> {{ $item['description'] }} </td>
                     {{-- <td> {{ $item['pic_name'] }} </td> --}}
                     {{-- <td>{{ $item['createdAt'] }}</td>
-                    <td>{{ $item['updatedAt'] }}</td> --}}
+                <td>{{ $item['updatedAt'] }}</td> --}}
                     <!--begin::Action=-->
                     <td>
                         <div class="btn-group" role="group">

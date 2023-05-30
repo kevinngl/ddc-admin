@@ -10,9 +10,6 @@
                     <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
                         <img src="{{ $data['image']['filePath'] ?? 'https://images.bisnis.com/posts/2021/12/10/1476128/donasi.jpeg' }}"
                             alt="image" />
-                        <div
-                            class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px">
-                        </div>
                     </div>
                 </div>
                 <!--end::Pic-->
@@ -22,6 +19,8 @@
                 <!--begin::Position-->
                 @if ($data['status'] === 'approved')
                     <div class="badge badge-light-success fw-bolder mb-6">Diterima</div>
+                @elseif ($data['status'] === 'live')
+                    <div class="badge badge-light-success fw-bolder mb-6">Aktif</div>
                 @elseif ($data['status'] === 'request-revision')
                     <div class="badge badge-light-warning fw-bolder mb-6">Butuh perbaikan</div>
                     <div class="text-muted fw-bold fs-5 mb-5">

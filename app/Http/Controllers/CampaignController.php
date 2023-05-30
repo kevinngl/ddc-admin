@@ -69,7 +69,7 @@ class CampaignController extends Controller
             $page,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-        // dd($collection);
+        
         return view('pages.campaign.main', compact('data'));
     }
 
@@ -79,6 +79,8 @@ class CampaignController extends Controller
             'page' => 1,
             'limit' => 10,
         ]);
+        // dd($response);
+
         $category = null;
         $category = $response["data"]["result"];
         return view('pages.campaign.modal', compact('category'));

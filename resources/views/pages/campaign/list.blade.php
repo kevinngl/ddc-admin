@@ -29,9 +29,11 @@
                     <td>{{ $item['pic']['name'] ?? 'N/A' }}</td>
                     <td>
                         @if ($item['status'] === 'approved')
-                            <div class="badge badge-light-success fw-bolder">Diterima</div>
+                            <div class="badge badge-light-primary fw-bolder">Diterima</div>
                         @elseif ($item['status'] === 'request-revision')
                             <div class="badge badge-light-warning fw-bolder">Revisi</div>
+                        @elseif ($item['status'] === 'live')
+                            <div class="badge badge-light-success fw-bolder">Aktif</div>
                         @elseif ($item['status'] === 'rejected')
                             <div class="badge badge-light-danger fw-bolder">Ditolak</div>
                         @elseif ($item['status'] === 'waiting-for-approval')
@@ -47,6 +49,11 @@
                     <!--end::Action=-->
                 </tr>
             @endforeach
+            @if (empty($data))
+                <tr>
+                    <td colspan="4" class="text-center">Belum ada kampanye</td>
+                </tr>
+            @endif
             <!--end::Table row-->
         </tbody>
         <!--end::Table body-->
