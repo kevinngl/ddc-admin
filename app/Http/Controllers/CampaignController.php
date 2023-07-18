@@ -143,6 +143,7 @@ class CampaignController extends Controller
 
         $response = $this->campaignService->create($payload);
 
+        dd($response);
         if ($response['success']) {
             return response()->json([
                 'alert' => 'success',

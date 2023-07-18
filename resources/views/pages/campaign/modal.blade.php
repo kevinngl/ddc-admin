@@ -20,7 +20,7 @@
     <form id="form_create_donation" enctype="multipart/form-data">
         @csrf
         <div class="mb-13 text-center">
-            <h1 class="mb-3">Tambah Program Donasi</h1>
+            <h1 class="mb-3">Tambah Kampanye</h1>
         </div>
 
         <div class="fv-row mb-7">
