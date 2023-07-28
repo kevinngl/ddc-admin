@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 use App\Libraries\GoogleCloudStorage as GCS;
 use DateTime;
@@ -72,6 +73,7 @@ class CampaignController extends Controller
         
         return view('pages.campaign.main', compact('data'));
     }
+    
 
     public function create()
     {
@@ -143,7 +145,6 @@ class CampaignController extends Controller
 
         $response = $this->campaignService->create($payload);
 
-        dd($response);
         if ($response['success']) {
             return response()->json([
                 'alert' => 'success',

@@ -16,7 +16,8 @@ Route::group(['domain' => ''], function() {
             Route::get('logout',[AuthController::class, 'do_logout'])->name('logout');
         
             Route::get('dashboard',[DashboardController::class, 'index'])->name('dashboard');
-    
+            Route::post('filter', [DashboardController::class, 'filter'])->name('filter');
+
             Route::prefix('donation')->name('donation.')->group(function(){
                 Route::get('',  [DonationController::class, 'index'])->name('index');
                 Route::get('create',[DonationController::class, 'create'])->name('create');

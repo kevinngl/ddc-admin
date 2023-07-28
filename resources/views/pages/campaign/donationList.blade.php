@@ -15,7 +15,7 @@
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar">
                         <!--begin::Filter-->
-                        @if ($data['status'] === 'live')
+                        {{-- @if ($data['status'] === 'live')
                             <button type="button" class="btn btn-sm btn-flex btn-light-primary" data-bs-toggle="modal"
                                 data-bs-target="#ModalDonation">
                                 <!--begin::Svg Icon | path: icons/duotone/Interface/Plus-Square.svg-->
@@ -32,7 +32,7 @@
                                 </span>
                                 <!--end::Svg Icon-->Buat Donasi
                             </button>
-                        @endif
+                        @endif --}}
                         <!--end::Filter-->
                     </div>
                     <!--end::Card toolbar-->
